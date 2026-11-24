@@ -1,0 +1,3160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>Elaia’s 6th Birthday Invitation — Storybook</title>
+
+  <!-- Google Fonts: Great Vibes, Cinzel, Playfair Display, Fredoka & Nunito -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Fredoka:wght@500;600;700&family=Great+Vibes&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,700&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <!-- Small local utility styles replace the runtime CSS library. -->
+
+  <style>
+    /* =========================================================================
+       SHARED DESIGN TOKENS & BASE STYLES
+       ========================================================================= */
+    :root {
+      --bg-cream: #fcfaf7;
+      --card-white: #ffffff;
+      --border-mint: #c6dbd6;
+      --border-pink: #f1c4c4;
+      --pink-primary: #d94e43;
+      --pink-dark: #b9382e;
+      --pink-soft: #fdf3f2;
+      --mint-primary: #63a496;
+      --mint-soft: #f1f7f5;
+      --forest-dark: #254e46;
+      --brown-text: #7a4b3a;
+      --charcoal-text: #2c2a29;
+      --muted-text: #6e6764;
+      --chimney-brick: #a83c33;
+      --chimney-brick-dark: #872c24;
+      --chimney-flue: #4f1d18;
+      --chimney-spark: #b88b58;
+      --gold-accent: #f3c64f;
+      --shadow-soft: 0 6px 20px rgba(44, 42, 41, 0.06);
+      --shadow-float: 0 4px 14px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      overflow-x: hidden;
+      overflow-y: auto;
+      scrollbar-width: none;
+      background-color: #17322c;
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      display: none;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #17322c;
+      color: var(--charcoal-text);
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior-y: none;
+      -webkit-overflow-scrolling: touch;
+      position: relative;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+    h1, h2, h3 { font-size: inherit; font-weight: inherit; }
+    button { font: inherit; margin: 0; }
+
+    .font-script {
+      font-family: 'Great Vibes', cursive;
+    }
+
+    .font-serif-display {
+      font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+    }
+
+    /* =========================================================================
+       PART 1: WINTER VILLAGE STORYBOOK ("birthday_invitation_2d_storybook_webpage")
+       ========================================================================= */
+    @keyframes flameFlicker {
+      0%, 100% {
+        transform: scale(1, 1) rotate(-1deg);
+        opacity: 0.94;
+      }
+      35% {
+        transform: scale(1.05, 0.96) rotate(1.5deg);
+        opacity: 1;
+      }
+      70% {
+        transform: scale(0.95, 1.04) rotate(-1.2deg);
+        opacity: 0.88;
+      }
+    }
+
+    .candle-flame {
+      transform-box: fill-box;
+      transform-origin: 50% 90%;
+      animation: flameFlicker 2.6s ease-in-out infinite;
+    }
+
+    @keyframes lightTwinkle {
+      0%, 100% { opacity: 0.95; }
+      50% { opacity: 0.42; }
+    }
+
+    .twinkle-1 { animation: lightTwinkle 2.2s ease-in-out infinite; }
+    .twinkle-2 { animation: lightTwinkle 2.8s ease-in-out 0.9s infinite; }
+
+    #plane-village,
+    #village-left,
+    #village-right {
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    #storybook-viewport {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 35%, #23463e 0%, #102420 100%);
+      z-index: 1;
+    }
+
+    /* Portrait Phone Shell (9:16 / iPhone proportions) */
+    #phone-shell {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      max-width: 100vw;
+      max-height: 100dvh;
+      overflow: hidden;
+      background-color: #17322c;
+    }
+
+    @media (min-width: 520px) {
+      #phone-shell {
+        width: min(412px, 92vw);
+        height: min(844px, 93dvh);
+        border-radius: 42px;
+        border: 8px solid #1d2624;
+        box-shadow:
+          0 28px 70px rgba(0, 0, 0, 0.55),
+          0 0 0 2px rgba(232, 202, 122, 0.28),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      }
+    }
+
+    #card-frame {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background-color: #17322c;
+    }
+
+    #persistent-scroll-cue {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: calc(max(44px, 5.75%) + env(safe-area-inset-bottom, 0px));
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 60;
+      background: transparent;
+    }
+
+    /* Raise only the storybook prompt above mobile browser controls. */
+    body.invitation-active #persistent-scroll-cue {
+      display: none;
+    }
+
+    body:not(.invitation-active) #persistent-scroll-cue {
+      bottom: 60px;
+      bottom: clamp(52px, 9%, 80px);
+    }
+
+    /* Interactive trigger on Santa's notice board */
+    #santa-notice-board {
+      cursor: pointer;
+    }
+
+    /* =========================================================================
+       SMOOTH CROSS-DISSOLVE & GLIDE TRANSITION LAYER INTO PART 2
+       ========================================================================= */
+    #invitation-reveal-shell {
+      position: absolute;
+      inset: 0;
+      z-index: 40;
+      background-color: #23463e;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translate3d(0, 28px, 0) scale(0.985);
+      transform-origin: 50% 35%;
+      will-change: transform, opacity;
+      transition:
+        opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0s linear 0.55s;
+    }
+
+    #invitation-reveal-shell.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translate3d(0, 0, 0) scale(1);
+      transition:
+        opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0s linear 0s;
+    }
+
+    /* Warm Cream Handoff Veil that Bridges #17322c to #fcfaf7 Without Green Flash */
+    #cream-handoff-veil {
+      position: absolute;
+      inset: 0;
+      z-index: 35;
+      background-color: var(--bg-cream);
+      pointer-events: none;
+      opacity: 0;
+      will-change: opacity;
+    }
+
+    /* =========================================================================
+       PART 2: ELAIA'S 6TH BIRTHDAY INVITATION
+       ========================================================================= */
+    .snow-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 45;
+    }
+
+    .confetti-burst-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 55;
+      overflow: hidden;
+    }
+
+    .ballistic-dot {
+      position: absolute;
+      left: 0;
+      top: 0;
+      border-radius: 50%;
+      will-change: transform, opacity;
+      pointer-events: none;
+    }
+
+    .bunting-header {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+      padding-top: 2px;
+    }
+
+    .bunting-svg {
+      width: 100%;
+      min-width: 420px;
+      height: 36px;
+      display: block;
+    }
+
+    .top-actions {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 70;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-village-btn {
+      height: 40px;
+      padding: 0 13px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1.5px solid #c6dbd6;
+      box-shadow: var(--shadow-float);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      color: var(--forest-dark);
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      font-size: 12px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+    }
+
+    .back-village-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--pink-primary);
+      background: #fffdfd;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.13);
+    }
+
+    .icon-pill-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 1.5px solid #ece7e2;
+      box-shadow: var(--shadow-float);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--forest-dark);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+    }
+
+    .icon-pill-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--pink-primary);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.13);
+    }
+
+    .icon-pill-btn.active-audio {
+      color: #c94a4a;
+      border-color: #f1c4c4;
+    }
+
+    .page-container {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 18px 12px 110px 12px;
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 78px minmax(0, 1fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    @media (min-width: 480px) {
+      .page-container {
+        padding: 24px 16px 120px 16px;
+        grid-template-columns: 92px minmax(0, 1fr);
+        gap: 16px;
+      }
+    }
+
+    .chimney-column {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 46px;
+      padding-bottom: 6px;
+      user-select: none;
+      touch-action: pan-y;
+    }
+
+    .chimney-shaft {
+      width: 62px;
+      flex: 1;
+      min-height: 920px;
+      background: linear-gradient(
+        90deg,
+        var(--chimney-brick) 0%,
+        var(--chimney-brick) 22%,
+        var(--chimney-flue) 22%,
+        var(--chimney-flue) 78%,
+        var(--chimney-brick) 78%,
+        var(--chimney-brick) 100%
+      );
+      position: relative;
+      border-radius: 6px 6px 0 0;
+      box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.25);
+      cursor: ns-resize;
+    }
+
+    @media (min-width: 480px) {
+      .chimney-shaft {
+        width: 74px;
+      }
+    }
+
+    .chimney-shaft::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 26px,
+        rgba(82, 20, 15, 0.45) 26px,
+        rgba(82, 20, 15, 0.45) 28px
+      );
+      pointer-events: none;
+    }
+
+    .chimney-dots {
+      position: absolute;
+      top: 16px;
+      bottom: 85px;
+      left: 24%;
+      right: 24%;
+      background-image: radial-gradient(circle, var(--chimney-spark) 2px, transparent 2.5px);
+      background-size: 12px 32px;
+      background-position: center top;
+      opacity: 0.85;
+    }
+
+    .chimney-top-cap {
+      position: absolute;
+      top: -10px;
+      left: -6px;
+      right: -6px;
+      height: 14px;
+      background: var(--chimney-brick-dark);
+      border-radius: 4px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .fireplace-base {
+      width: 78px;
+      height: 86px;
+      background: var(--chimney-brick);
+      border-radius: 10px 10px 6px 6px;
+      position: relative;
+      margin-top: -4px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 6px;
+      z-index: 3;
+    }
+
+    @media (min-width: 480px) {
+      .fireplace-base {
+        width: 92px;
+        height: 94px;
+      }
+    }
+
+    .fireplace-mantel {
+      position: absolute;
+      top: -6px;
+      left: -5px;
+      right: -5px;
+      height: 10px;
+      background: #7c2720;
+      border-radius: 4px;
+    }
+
+    .fireplace-hearth {
+      width: 48px;
+      height: 44px;
+      background: #2f1411;
+      border-radius: 26px 26px 4px 4px;
+      border: 3px solid #6b221b;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .fire-flame {
+      width: 15px;
+      height: 22px;
+      background: radial-gradient(circle at 50% 75%, #fff3b0 10%, #ff9f1c 55%, #e71d36 95%);
+      border-radius: 50% 50% 35% 35%;
+      margin-bottom: 3px;
+      animation: flicker 0.9s infinite alternate ease-in-out;
+    }
+
+    .fireplace-gifts {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .mini-gift {
+      width: 16px;
+      height: 11px;
+      border-radius: 2px;
+      border: 1.5px solid #ffffff;
+    }
+
+    .mini-gift.pink { background: var(--pink-primary); }
+    .mini-gift.mint { background: var(--mint-primary); }
+
+    .santa-actor {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 148px;
+      height: 174px;
+      margin-left: -74px;
+      z-index: 25;
+      pointer-events: none;
+      will-change: transform;
+      transform: translate3d(0, -54px, 0);
+    }
+
+    .santa-svg-wrap {
+      width: 100%;
+      height: 100%;
+      transform-origin: 50% 50%;
+      will-change: transform;
+      filter: drop-shadow(0 3px 6px rgba(44, 42, 41, 0.1));
+    }
+
+    .santa-speech-bubble {
+      position: absolute;
+      left: 50%;
+      top: -28px;
+      background: #ffffff;
+      border: 2.2px solid #d94e43;
+      border-radius: 999px;
+      padding: 6px 13px;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.3px;
+      color: var(--charcoal-text);
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      opacity: 0;
+      pointer-events: none;
+      will-change: transform, opacity;
+      transform: translate3d(-50%, 0, 0) scale(0.92) rotate(0deg);
+      z-index: 35;
+    }
+
+    .santa-speech-bubble::before {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 8px 6px 0;
+      border-style: solid;
+      border-color: #d94e43 transparent transparent;
+    }
+
+    .santa-speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 6px 4.5px 0;
+      border-style: solid;
+      border-color: #ffffff transparent transparent;
+    }
+
+    /* Initial scroll hint points upward toward Santa. */
+    .santa-speech-bubble.scroll-hint::before {
+      top: -8px;
+      bottom: auto;
+      border-width: 0 6px 8px;
+      border-color: transparent transparent #d94e43;
+    }
+
+    .santa-speech-bubble.scroll-hint::after {
+      top: -5px;
+      bottom: auto;
+      border-width: 0 4.5px 6px;
+      border-color: transparent transparent #ffffff;
+    }
+
+    .mantel-smoke-puff {
+      animation: smokeBreathe 1.9s ease-in-out infinite alternate;
+    }
+
+    @keyframes smokeBreathe {
+      0% { transform: scale(0.95); opacity: 0.78; }
+      100% { transform: scale(1.07); opacity: 0.94; }
+    }
+
+    @keyframes flicker {
+      0% { transform: scaleY(0.92) scaleX(1.04); }
+      100% { transform: scaleY(1.08) scaleX(0.95); }
+    }
+
+    .cards-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+    }
+
+    .invite-card {
+      background: var(--card-white);
+      border: 2px solid var(--border-mint);
+      border-radius: 26px;
+      padding: 24px 16px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      text-align: center;
+    }
+
+    @media (min-width: 480px) {
+      .invite-card {
+        padding: 28px 22px;
+      }
+    }
+
+    .hero-icons-row {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin-bottom: 18px;
+      padding: 0 4px;
+    }
+
+    .hero-sticker {
+      width: 42px;
+      height: 42px;
+      display: inline-block;
+      transform-origin: center bottom;
+      animation: stickerGentleFloat 3.4s ease-in-out infinite;
+    }
+
+    .hero-sticker.gift-anim {
+      animation: giftBounce 3.1s ease-in-out infinite;
+    }
+
+    .hero-sticker.bell-anim {
+      transform-origin: top center;
+      animation: bellSwing 2.6s ease-in-out infinite;
+    }
+
+    .hero-sticker.stocking-anim {
+      transform-origin: top center;
+      animation: stockingSway 3.3s ease-in-out infinite;
+    }
+
+    @keyframes giftBounce {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      35% { transform: translateY(-5px) rotate(-3deg); }
+      70% { transform: translateY(-2px) rotate(3deg); }
+    }
+
+    @keyframes bellSwing {
+      0%, 100% { transform: rotate(-6deg); }
+      50% { transform: rotate(7deg); }
+    }
+
+    @keyframes stockingSway {
+      0%, 100% { transform: rotate(-4deg) translateY(0); }
+      50% { transform: rotate(5deg) translateY(-4px); }
+    }
+
+    @keyframes stickerGentleFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-4px) scale(1.04); }
+    }
+
+    .kicker-font {
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-style: normal;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      color: var(--forest-dark);
+      margin-bottom: 8px;
+    }
+
+    .celebrant-name {
+      font-family: 'Great Vibes', 'Fredoka', cursive;
+      font-weight: 400;
+      font-size: clamp(46px, 12vw, 62px);
+      line-height: 0.9;
+      color: var(--pink-primary);
+      text-shadow: 0 2px 0 rgba(217, 78, 67, 0.18);
+      margin-bottom: 0;
+    }
+
+    .celebrant-milestone {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      font-size: 21px;
+      color: #7eb0a5;
+      line-height: 1.15;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+    .event-details-box {
+      border: 1.8px solid var(--border-pink);
+      border-radius: 20px;
+      padding: 16px 12px;
+      background: #fffdfd;
+      margin-bottom: 18px;
+    }
+
+    .event-datetime {
+      font-weight: 800;
+      font-size: 14.5px;
+      color: var(--brown-text);
+      margin-bottom: 5px;
+    }
+
+    .event-venue {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--brown-text);
+      margin-bottom: 4px;
+    }
+
+    .event-address {
+      font-weight: 600;
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: #8b685b;
+      margin-bottom: 14px;
+    }
+
+    .event-actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .event-action-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.16s ease, transform 0.16s ease;
+    }
+
+    .event-action-pill.save-date {
+      background: #fae8e8;
+      border: 1.5px solid #ecc0c0;
+      color: var(--brown-text);
+    }
+
+    .event-action-pill.save-date:hover {
+      background: #f6dada;
+      transform: translateY(-1px);
+    }
+
+    .event-action-pill.open-maps {
+      background: var(--mint-soft);
+      border: 1.5px solid var(--border-mint);
+      color: var(--forest-dark);
+    }
+
+    .event-action-pill.open-maps:hover {
+      background: #e3f0ec;
+      transform: translateY(-1px);
+    }
+
+    .sticker-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px 8px;
+      align-items: center;
+      justify-items: center;
+      padding-top: 2px;
+    }
+
+    .sticker-item {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: gridStickerWobble 3.6s ease-in-out infinite;
+    }
+
+    .sticker-item:nth-child(2) { animation-delay: 0.4s; }
+    .sticker-item:nth-child(3) { animation-delay: 0.8s; }
+    .sticker-item:nth-child(4) { animation-delay: 1.2s; }
+    .sticker-item:nth-child(5) { animation-delay: 1.6s; }
+    .sticker-item:nth-child(6) { animation-delay: 2.0s; }
+
+    @keyframes gridStickerWobble {
+      0%, 100% { transform: translateY(0) rotate(-2deg) scale(1); }
+      50% { transform: translateY(-4px) rotate(3deg) scale(1.06); }
+    }
+
+    .activities-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .activity-box {
+      border-radius: 18px;
+      padding: 16px 14px;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+
+    .activity-box:hover {
+      transform: translateY(-2px);
+    }
+
+    .activity-box.cake {
+      background: #fbf7f2;
+      border: 1.5px solid #ecdfd0;
+    }
+
+    .activity-box.cookies {
+      background: #f5f9f8;
+      border: 1.5px solid #d7e7e3;
+    }
+
+    .activity-box.cocoa {
+      background: #fdf6f5;
+      border: 1.5px solid #f4d5d5;
+    }
+
+    .activity-title {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--forest-dark);
+      margin-bottom: 3px;
+    }
+
+    .activity-desc {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--brown-text);
+    }
+
+    .invite-card .activity-desc strong {
+      color: var(--forest-dark);
+    }
+
+    .countdown-heading {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 1.2;
+      color: var(--forest-dark);
+      margin-bottom: 16px;
+    }
+
+    .countdown-tray {
+      background: var(--mint-soft);
+      border: 1.5px solid #dcebe7;
+      border-radius: 18px;
+      padding: 10px 8px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .time-tile {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 10px 2px;
+      box-shadow: 0 2px 6px rgba(37, 78, 70, 0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .time-num {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--forest-dark);
+      line-height: 1.1;
+    }
+
+    .time-unit {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.7px;
+      color: var(--brown-text);
+      margin-top: 3px;
+    }
+
+    /* Native scrolling, stable mobile viewport and low-cost static texture. */
+    html { scroll-behavior: auto; overflow-x: hidden; }
+    body { overflow: visible; line-height: 1.5; }
+    svg, canvas { display: block; vertical-align: middle; }
+    .relative { position: relative; } .absolute { position: absolute; }
+    .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+    .w-full { width: 100%; } .h-full { height: 100%; }
+    .block { display: block; } .overflow-hidden { overflow: hidden; }
+    .pointer-events-none { pointer-events: none; }
+    .select-none { -webkit-user-select: none; user-select: none; }
+    #scroll-runway { height: 350vh; }
+    #storybook-viewport, #phone-shell { height: 100vh; }
+    #phone-shell { max-height: 100vh; }
+    @supports (height: 100svh) {
+      #storybook-viewport, #phone-shell { height: 100svh; }
+      #phone-shell { max-height: 100svh; }
+      #scroll-runway { height: 350svh; }
+    }
+    @media (min-width: 520px) {
+      #phone-shell { height: 93vh; max-height: 844px; width: 92vw; max-width: 412px; }
+      @supports (height: 100svh) { #phone-shell { height: 93svh; } }
+    }
+    #card-frame::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background-image: url("data:image/png;base64,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");
+      z-index: 1;
+    }
+    #card-frame { transition: visibility 0s; }
+    .invitation-active #card-frame { visibility: hidden; transition: visibility 0s 0.75s; }
+    #invitation-reveal-shell { overscroll-behavior: contain; touch-action: pan-y; }
+    #invitation-reveal-shell:not(.is-open) *,
+    .invitation-active #card-frame * { animation-play-state: paused !important; }
+    #scene-svg { overflow: hidden; }
+    .chimney-shaft { touch-action: pan-y; }
+    .lite-motion .twinkle-1, .lite-motion .twinkle-2, .lite-motion .candle-flame,
+    .lite-motion .hero-sticker, .lite-motion .sticker-item,
+    .lite-motion .mantel-smoke-puff { animation: none !important; }
+    .lite-motion #stage1-typography, .lite-motion #santaTumbleGroup,
+    .lite-motion #santaButtUpGroup g[filter] { filter: none; }
+    .lite-motion .santa-svg-wrap { filter: none; }
+    @media (max-width: 359px) {
+      .page-container { grid-template-columns: 62px minmax(0, 1fr); gap: 8px; padding-left: 8px; padding-right: 8px; }
+      .chimney-shaft { width: 50px; } .fireplace-base { width: 62px; }
+      .invite-card { padding-left: 10px; padding-right: 10px; }
+      .countdown-tray { gap: 3px; padding-left: 4px; padding-right: 4px; }
+      .time-num { font-size: 17px; } .time-unit { font-size: 8px; letter-spacing: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+      #invitation-reveal-shell, #invitation-reveal-shell.is-open { transition-duration: 0.12s; }
+    }
+  </style>
+</head>
+<body class="select-none">
+
+  <!-- =========================================================================
+       PART 1: WINTER VILLAGE STORYBOOK RUNWAY (#scroll-runway, 350vh)
+       ========================================================================= -->
+  <main id="scroll-runway" class="relative w-full">
+
+    <!-- Fixed Centered Phone Viewport -->
+    <div id="storybook-viewport">
+      <div id="phone-shell">
+
+      <!-- Portrait Storybook Illustration Frame -->
+      <div id="card-frame" class="relative overflow-hidden">
+
+        <!-- =====================================================================
+             MASTER 2D FLAT STORYBOOK VECTOR ILLUSTRATION (450 x 800 ViewBox)
+             ===================================================================== -->
+        <svg
+          id="scene-svg"
+          viewBox="0 0 450 800"
+          preserveAspectRatio="xMidYMid slice"
+          class="absolute inset-0 w-full h-full block"
+          aria-label="Birthday Invitation Storybook Illustration"
+        >
+          <defs>
+            <!-- 1. Deep Forest Slate-Green Night Sky Gradient -->
+            <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#17322c" />
+              <stop offset="30%" stop-color="#1f3e37" />
+              <stop offset="62%" stop-color="#2c5148" />
+              <stop offset="100%" stop-color="#3c6358" />
+            </linearGradient>
+
+            <!-- 2. Antique Metallic Gold Gradients -->
+            <linearGradient id="goldFoilGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fff0bc" />
+              <stop offset="35%" stop-color="#e8ca7a" />
+              <stop offset="72%" stop-color="#c99e42" />
+              <stop offset="100%" stop-color="#f2d685" />
+            </linearGradient>
+
+            <radialGradient id="goldSphereGrad" cx="34%" cy="28%" r="72%">
+              <stop offset="0%" stop-color="#fff6cf" />
+              <stop offset="30%" stop-color="#e8ca7a" />
+              <stop offset="74%" stop-color="#b58932" />
+              <stop offset="100%" stop-color="#7c5817" />
+            </radialGradient>
+
+            <!-- 3. Glossy Crimson Ornament & Satin Ribbon Gradients -->
+            <radialGradient id="crimsonSphereGrad" cx="32%" cy="26%" r="72%">
+              <stop offset="0%" stop-color="#ff8c82" />
+              <stop offset="28%" stop-color="#c82b24" />
+              <stop offset="78%" stop-color="#8c1510" />
+              <stop offset="100%" stop-color="#590906" />
+            </radialGradient>
+
+            <linearGradient id="crimsonRibbonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#cf2f27" />
+              <stop offset="55%" stop-color="#a31c16" />
+              <stop offset="100%" stop-color="#730e0a" />
+            </linearGradient>
+
+            <!-- 4. Warm Cream-Ivory Snowdrifts & Ice Lumps -->
+            <linearGradient id="snowHillBackGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#f8f2e4" />
+              <stop offset="100%" stop-color="#e7d9be" />
+            </linearGradient>
+
+            <linearGradient id="snowHillFrontGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#faf4e8" />
+              <stop offset="52%" stop-color="#efe3cb" />
+              <stop offset="100%" stop-color="#e2d1b2" />
+            </linearGradient>
+
+            <linearGradient id="iceLumpGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#fcf8ef" />
+              <stop offset="65%" stop-color="#ede0c6" />
+              <stop offset="100%" stop-color="#d7c5a3" />
+            </linearGradient>
+
+            <!-- 5. Candlelight & Star Aura Gradients -->
+            <radialGradient id="candleHaloGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffd97d" stop-opacity="0.72" />
+              <stop offset="48%" stop-color="#f59a38" stop-opacity="0.22" />
+              <stop offset="100%" stop-color="#f59a38" stop-opacity="0" />
+            </radialGradient>
+
+            <linearGradient id="candleBodyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#c85c23" />
+              <stop offset="42%" stop-color="#eb8844" />
+              <stop offset="100%" stop-color="#ad4715" />
+            </linearGradient>
+
+            <radialGradient id="starGlowGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#fff7cc" stop-opacity="0.92" />
+              <stop offset="42%" stop-color="#e8ca7a" stop-opacity="0.32" />
+              <stop offset="100%" stop-color="#e8ca7a" stop-opacity="0" />
+            </radialGradient>
+
+            <!-- 6. Notice Board Wood Frame & Cream Parchment -->
+            <linearGradient id="noticeFrameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#754120" />
+              <stop offset="50%" stop-color="#542c13" />
+              <stop offset="100%" stop-color="#381b0a" />
+            </linearGradient>
+
+            <radialGradient id="parchmentFillGrad" cx="50%" cy="46%" r="74%">
+              <stop offset="0%" stop-color="#fdf8ed" />
+              <stop offset="68%" stop-color="#f4ebd9" />
+              <stop offset="100%" stop-color="#e4d3b3" />
+            </radialGradient>
+
+            <!-- 7. Soft Drop Shadow for Golden Arched Text -->
+            <filter id="archShadowFilter" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="2.5" stdDeviation="2.4" flood-color="#0b1a16" flood-opacity="0.78" />
+            </filter>
+
+            <!-- Curved Arch Paths for Stage 1 Opening Topic Heading -->
+            <path id="archMainHeadingPath" d="M 32,238 Q 225,84 418,238" fill="none" />
+            <path id="archSubHeadingPath" d="M 68,266 Q 225,146 382,266" fill="none" />
+          </defs>
+
+          <!-- =================================================================
+               PLANE 0: DEEP FOREST SLATE-GREEN SKY & DISTANT PINES
+               ================================================================= -->
+          <g id="plane-sky" style="transform-origin: 225px 380px;">
+            <rect x="0" y="0" width="450" height="800" fill="url(#skyGrad)" />
+
+            <!-- Scattered Cream & Gold Snow Specks Across Sky -->
+            <g fill="#f6efe0" opacity="0.68">
+              <circle cx="34" cy="38" r="1.5" />
+              <circle cx="106" cy="62" r="1.2" />
+              <circle cx="164" cy="28" r="1.8" />
+              <circle cx="226" cy="76" r="1.3" />
+              <circle cx="286" cy="34" r="1.7" />
+              <circle cx="344" cy="70" r="1.2" />
+              <circle cx="408" cy="34" r="1.6" />
+              <circle cx="84" cy="138" r="1.4" />
+              <circle cx="152" cy="118" r="1.9" />
+              <circle cx="212" cy="146" r="1.3" />
+              <circle cx="272" cy="114" r="1.8" />
+              <circle cx="334" cy="144" r="1.4" />
+              <circle cx="388" cy="126" r="1.7" />
+              <circle cx="116" cy="206" r="1.5" />
+              <circle cx="332" cy="204" r="1.5" />
+              <circle cx="186" cy="254" r="1.3" />
+              <circle cx="264" cy="250" r="1.4" />
+            </g>
+
+            <!-- Distant Soft Sage-Teal Silhouette Pine Trees -->
+            <g fill="#4b6f64" opacity="0.72">
+              <path d="M 272,395 C 280,378 286,356 291,334 L 278,336 C 287,316 293,294 298,272 L 287,274 C 294,254 299,236 303,218 C 307,236 312,254 319,274 L 308,272 C 313,294 319,316 328,336 L 315,334 C 320,356 326,378 334,395 Z" />
+              <path d="M 314,405 C 323,384 330,358 336,332 L 321,335 C 331,310 338,284 344,258 L 331,260 C 339,236 345,214 350,194 C 355,214 361,236 369,260 L 356,258 C 362,284 369,310 379,335 L 364,332 C 370,358 377,384 386,405 Z" />
+              <path d="M 92,388 C 99,372 104,352 108,332 L 97,334 C 105,316 110,296 114,278 L 105,280 C 111,262 115,246 118,230 C 121,246 125,262 131,280 L 122,278 C 126,296 131,316 139,334 L 128,332 C 132,352 137,372 144,388 Z" />
+            </g>
+
+            <!-- Distant Snow Horizon Ridge -->
+            <path d="M -20,418 Q 112,384 225,405 Q 338,424 470,390 L 470,800 L -20,800 Z" fill="url(#snowHillBackGrad)" />
+          </g>
+
+          <!-- =================================================================
+               PLANE 1: HERO CHRISTMAS TREE, SANTA CLAUS & THREE FESTIVE ELVES
+               ================================================================= -->
+          <g id="plane-hero" transform="translate(225, 422) scale(0.22)">
+
+            <!-- Soft Snowy Clearing Mound beneath the Hero Tree -->
+            <ellipse cx="0" cy="168" rx="245" ry="40" fill="#f4ebd9" />
+            <ellipse cx="0" cy="165" rx="200" ry="26" fill="#e2d1b2" opacity="0.65" />
+
+            <!-- Radiant Golden Star Halo -->
+            <circle cx="0" cy="-268" r="64" fill="url(#starGlowGrad)" />
+
+            <!-- ===================== HERO CHRISTMAS TREE ===================== -->
+            <g id="hero-christmas-tree">
+              <rect x="-18" y="104" width="36" height="58" rx="4" fill="#4f2c16" />
+              <rect x="-5" y="104" width="12" height="58" fill="#6b3d20" opacity="0.55" />
+
+              <!-- Tier 5 -->
+              <path d="M -154,118 C -112,126 -55,126 0,122 C 55,126 112,126 154,118 C 128,84 106,56 92,32 L -92,32 C -106,56 -128,84 -154,118 Z" fill="#132b24" />
+              <path d="M -140,111 C -98,118 -48,118 0,114 C 48,118 98,118 140,111 C 116,80 96,54 84,32 L -84,32 C -96,54 -116,80 -140,111 Z" fill="#1d4237" />
+              <path d="M -152,117 C -132,122 -112,120 -96,115 C -112,107 -126,103 -138,101 Z" fill="#faf4e8" opacity="0.9" />
+              <path d="M 152,117 C 132,122 112,120 96,115 C 112,107 126,103 138,101 Z" fill="#faf4e8" opacity="0.9" />
+
+              <!-- Tier 4 -->
+              <path d="M -128,46 C -92,54 -44,54 0,50 C 44,54 92,54 128,46 C 106,16 88,-12 74,-36 L -74,-36 C -88,-12 -106,16 -128,46 Z" fill="#16332b" />
+              <path d="M -115,40 C -80,47 -38,47 0,43 C 38,47 80,47 115,40 C 95,12 79,-14 66,-36 L -66,-36 C -79,-14 -95,12 -115,40 Z" fill="#234f42" />
+              <path d="M -126,45 C -108,50 -90,48 -78,43 C -92,36 -104,32 -114,30 Z" fill="#faf4e8" opacity="0.9" />
+              <path d="M 126,45 C 108,50 90,48 78,43 C 92,36 104,32 114,30 Z" fill="#faf4e8" opacity="0.9" />
+
+              <!-- Tier 3 -->
+              <path d="M -100,-24 C -70,-16 -34,-16 0,-20 C 34,-16 70,-16 100,-24 C 82,-52 66,-78 54,-102 L -54,-102 C -66,-78 -82,-52 -100,-24 Z" fill="#193b31" />
+              <path d="M -89,-29 C -60,-22 -28,-22 0,-25 C 28,-22 60,-22 89,-29 C 72,-55 58,-79 48,-102 L -48,-102 C -58,-79 -72,-55 -89,-29 Z" fill="#2b5b4c" />
+              <path d="M -98,-25 C -82,-20 -68,-22 -58,-27 C -70,-33 -80,-36 -88,-38 Z" fill="#faf4e8" opacity="0.9" />
+              <path d="M 98,-25 C 82,-20 68,-22 58,-27 C 70,-33 80,-36 88,-38 Z" fill="#faf4e8" opacity="0.9" />
+
+              <!-- Tier 2 -->
+              <path d="M -72,-90 C -50,-83 -24,-83 0,-86 C 24,-83 50,-83 72,-90 C 58,-116 44,-140 34,-162 L -34,-162 C -44,-140 -58,-116 -72,-90 Z" fill="#1d4237" />
+              <path d="M -62,-94 C -42,-88 -20,-88 0,-91 C 20,-88 42,-88 62,-94 C 49,-118 37,-141 29,-162 L -29,-162 C -37,-141 -49,-118 -62,-94 Z" fill="#326857" />
+              <path d="M -70,-91 C -56,-86 -45,-88 -38,-92 C -48,-98 -56,-100 -63,-102 Z" fill="#faf4e8" opacity="0.92" />
+              <path d="M 70,-91 C 56,-86 45,-88 38,-92 C 48,-98 56,-100 63,-102 Z" fill="#faf4e8" opacity="0.92" />
+
+              <!-- Tier 1 -->
+              <path d="M -45,-152 C -30,-146 -14,-146 0,-149 C 14,-146 30,-146 45,-152 C 30,-182 15,-212 0,-242 C -15,-212 -30,-182 -45,-152 Z" fill="#214b3f" />
+              <path d="M -37,-155 C -24,-150 -11,-150 0,-152 C 11,-150 24,-150 37,-155 C 24,-183 12,-212 0,-242 C -12,-212 -24,-183 -37,-155 Z" fill="#3b705e" />
+
+              <!-- Draped Crimson & Gold Garlands -->
+              <path d="M -28,-172 Q 0,-152 28,-172" fill="none" stroke="#c82b24" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="1 6" />
+              <path d="M -52,-110 Q 0,-84 52,-110" fill="none" stroke="#f5d87e" stroke-width="3.6" stroke-linecap="round" stroke-dasharray="1 6.5" />
+              <path d="M -80,-44 Q 0,-12 80,-44" fill="none" stroke="#c82b24" stroke-width="4.2" stroke-linecap="round" stroke-dasharray="1 7" />
+              <path d="M -108,24 Q 0,62 108,24" fill="none" stroke="#f5d87e" stroke-width="4.4" stroke-linecap="round" stroke-dasharray="1 7.5" />
+
+              <!-- Warm Twinkling Fairy Lights -->
+              <g fill="#ffe885">
+                <circle class="twinkle-1" cx="-16" cy="-186" r="3.4" />
+                <circle class="twinkle-2" cx="15" cy="-178" r="3.4" />
+                <circle class="twinkle-2" cx="-36" cy="-128" r="3.8" />
+                <circle class="twinkle-1" cx="4" cy="-118" r="3.8" />
+                <circle class="twinkle-2" cx="38" cy="-126" r="3.8" />
+                <circle class="twinkle-1" cx="-60" cy="-60" r="4.2" />
+                <circle class="twinkle-2" cx="-18" cy="-50" r="4.2" />
+                <circle class="twinkle-1" cx="24" cy="-54" r="4.2" />
+                <circle class="twinkle-2" cx="62" cy="-58" r="4.2" />
+                <circle class="twinkle-2" cx="-84" cy="8" r="4.4" />
+                <circle class="twinkle-1" cx="-36" cy="22" r="4.4" />
+                <circle class="twinkle-2" cx="16" cy="20" r="4.4" />
+                <circle class="twinkle-1" cx="70" cy="12" r="4.4" />
+                <circle class="twinkle-1" cx="-106" cy="78" r="4.6" />
+                <circle class="twinkle-2" cx="-54" cy="90" r="4.6" />
+                <circle class="twinkle-1" cx="54" cy="90" r="4.6" />
+                <circle class="twinkle-2" cx="106" cy="76" r="4.6" />
+              </g>
+
+              <!-- Glossy Crimson & Gold Baubles -->
+              <g>
+                <circle cx="0" cy="-200" r="6.8" fill="url(#crimsonSphereGrad)" />
+                <circle cx="-24" cy="-138" r="7.8" fill="url(#goldSphereGrad)" />
+                <circle cx="23" cy="-136" r="7.8" fill="url(#crimsonSphereGrad)" />
+                <circle cx="-48" cy="-74" r="8.8" fill="url(#crimsonSphereGrad)" />
+                <circle cx="0" cy="-70" r="8.4" fill="url(#goldSphereGrad)" />
+                <circle cx="48" cy="-72" r="8.8" fill="url(#crimsonSphereGrad)" />
+                <circle cx="-70" cy="-6" r="9.8" fill="url(#goldSphereGrad)" />
+                <circle cx="-22" cy="2" r="9.4" fill="url(#crimsonSphereGrad)" />
+                <circle cx="26" cy="0" r="9.4" fill="url(#goldSphereGrad)" />
+                <circle cx="72" cy="-4" r="9.8" fill="url(#crimsonSphereGrad)" />
+                <circle cx="-94" cy="62" r="10.8" fill="url(#crimsonSphereGrad)" />
+                <circle cx="-44" cy="70" r="10.2" fill="url(#goldSphereGrad)" />
+                <circle cx="46" cy="70" r="10.2" fill="url(#crimsonSphereGrad)" />
+                <circle cx="96" cy="60" r="10.8" fill="url(#goldSphereGrad)" />
+              </g>
+
+              <!-- Radiant Golden Star Topper -->
+              <polygon
+                points="0,-298 9,-276 32,-276 13,-262 20,-240 0,-254 -20,-240 -13,-262 -32,-276 -9,-276"
+                fill="url(#goldFoilGrad)"
+                stroke="#fff6cc"
+                stroke-width="1.5"
+              />
+            </g>
+
+            <!-- Illustrated Gift Boxes beside the Tree Trunk -->
+            <g id="hero-tree-gifts">
+              <rect x="-88" y="132" width="28" height="24" rx="3" fill="url(#crimsonRibbonGrad)" />
+              <rect x="-76" y="132" width="5" height="24" fill="#f5d87e" />
+              <rect x="-88" y="141" width="28" height="5" fill="#f5d87e" />
+
+              <rect x="64" y="130" width="32" height="26" rx="3" fill="#234f42" />
+              <rect x="78" y="130" width="5" height="26" fill="#d62830" />
+              <rect x="64" y="140" width="32" height="5" fill="#d62830" />
+            </g>
+
+            <!-- ===================== THREE FESTIVE CHRISTMAS ELVES ===================== -->
+            <g id="elf-left-outer" transform="translate(-156, 108)">
+              <ellipse cx="0" cy="56" rx="22" ry="6" fill="#d7c6a5" />
+              <rect x="-10" y="32" width="7" height="16" rx="2.5" fill="#1e6b4b" />
+              <rect x="3" y="32" width="7" height="16" rx="2.5" fill="#1e6b4b" />
+              <path d="M -14,46 L -2,46 L -2,56 L -16,56 Q -18,50 -14,46 Z" fill="#8c1118" />
+              <path d="M 2,46 L 14,46 Q 18,50 16,56 L 2,56 Z" fill="#8c1118" />
+              <path d="M -16,4 L 16,4 L 22,35 L -22,35 Z" fill="url(#crimsonRibbonGrad)" />
+              <path d="M -22,33 L -15,38 L -7,33 L 0,38 L 7,33 L 15,38 L 22,33 L 22,37 L -22,37 Z" fill="#1e8c82" />
+              <path d="M -12,4 Q 0,11 12,4 L 13,9 Q 0,14 -13,9 Z" fill="#1e8c82" />
+              <rect x="-17" y="21" width="34" height="4.5" fill="#2b1911" />
+              <rect x="-4" y="19.5" width="8" height="7.5" rx="1.2" fill="none" stroke="#f5d87e" stroke-width="1.6" />
+              <path d="M -15,8 L -24,24 L -18,27 L -11,13 Z" fill="#b81d24" />
+              <path d="M 15,8 L 24,23 L 18,26 L 11,13 Z" fill="#b81d24" />
+              <circle cx="-21" cy="26" r="4" fill="#1e8c82" />
+              <circle cx="21" cy="25" r="4" fill="#1e8c82" />
+              <polygon points="-14,-12 -24,-15 -14,-7" fill="#f2c2a2" />
+              <polygon points="14,-12 24,-15 14,-7" fill="#f2c2a2" />
+              <path d="M -14,-13 Q -13,-26 0,-26 Q 13,-26 14,-13 Q 8,-19 0,-18 Q -8,-19 -14,-13 Z" fill="#2d1b14" />
+              <circle cx="0" cy="-11" r="14.5" fill="#f2c2a2" />
+              <circle cx="-5" cy="-11" r="1.8" fill="#231612" />
+              <circle cx="5" cy="-11" r="1.8" fill="#231612" />
+              <circle cx="-8.5" cy="-7.5" r="2.6" fill="#eb7a70" opacity="0.65" />
+              <circle cx="8.5" cy="-7.5" r="2.6" fill="#eb7a70" opacity="0.65" />
+              <path d="M -4,-6.5 Q 0,-2.5 4,-6.5" fill="none" stroke="#8a2c24" stroke-width="1.7" stroke-linecap="round" />
+              <path d="M -13,-23 Q -4,-52 18,-36 Q 25,-30 22,-22 L 13,-23 Q 12,-31 2,-31 L -13,-23 Z" fill="#1e8c82" />
+              <path d="M -13,-23 Q 0,-20 13,-23" fill="none" stroke="#f5d87e" stroke-width="2.6" stroke-linecap="round" />
+              <circle cx="23" cy="-21" r="4.5" fill="#f5d87e" />
+            </g>
+
+            <g id="elf-left-inner" transform="translate(-104, 110)">
+              <ellipse cx="0" cy="54" rx="21" ry="5.5" fill="#d7c6a5" />
+              <rect x="-9" y="30" width="6.5" height="16" rx="2.5" fill="#8c1118" />
+              <rect x="2.5" y="30" width="6.5" height="16" rx="2.5" fill="#8c1118" />
+              <path d="M -13,45 L -2,45 L -2,54 L -15,54 Q -17,49 -13,45 Z" fill="#2b1911" />
+              <path d="M 2,45 L 13,45 Q 17,49 15,54 L 2,54 Z" fill="#2b1911" />
+              <path d="M -15,3 L 15,3 L 21,34 L -21,34 Z" fill="#234f42" />
+              <rect x="-16" y="19" width="32" height="4" fill="#2b1911" />
+              <rect x="-3.5" y="17.5" width="7" height="7" rx="1" fill="none" stroke="#f5d87e" stroke-width="1.5" />
+              <path d="M -11,3 Q -5,10 0,5 Q 5,10 11,3 Z" fill="#e04f48" />
+              <path d="M -14,7 L -23,19 L -18,22 L -11,12 Z" fill="#234f42" />
+              <path d="M 14,7 L 23,19 L 18,22 L 11,12 Z" fill="#234f42" />
+              <circle cx="-20.5" cy="21" r="3.5" fill="#f7ceb2" />
+              <circle cx="20.5" cy="21" r="3.5" fill="#f7ceb2" />
+              <polygon points="-13.5,-11 -23,-14 -13.5,-6.5" fill="#f7ceb2" />
+              <polygon points="13.5,-11 23,-14 13.5,-6.5" fill="#f7ceb2" />
+              <circle cx="0" cy="-11" r="14" fill="#f7ceb2" />
+              <path d="M -14,-12 Q -13,-25 0,-25 Q 13,-25 14,-12 Q 6,-18 0,-15 Q -6,-18 -14,-12 Z" fill="#e8ba58" />
+              <circle cx="-4.8" cy="-11" r="1.7" fill="#2b211a" />
+              <circle cx="4.8" cy="-11" r="1.7" fill="#2b211a" />
+              <circle cx="-8.2" cy="-7.5" r="2.5" fill="#f28479" opacity="0.65" />
+              <circle cx="8.2" cy="-7.5" r="2.5" fill="#f28479" opacity="0.65" />
+              <path d="M -3.8,-6.5 Q 0,-2.8 3.8,-6.5" fill="none" stroke="#99332b" stroke-width="1.6" stroke-linecap="round" />
+              <path d="M -12,-22 Q -2,-49 18,-34 Q 24,-28 21,-21 L 12,-22 Q 11,-29 2,-29 L -12,-22 Z" fill="#e04f48" />
+              <path d="M -12,-22 Q 0,-19 12,-22" fill="none" stroke="#f5d87e" stroke-width="2.4" stroke-linecap="round" />
+              <circle cx="22" cy="-20" r="4.2" fill="#f5d87e" />
+            </g>
+
+            <g id="elf-right" transform="translate(126, 108)">
+              <ellipse cx="0" cy="56" rx="22" ry="6" fill="#d7c6a5" />
+              <rect x="-10" y="32" width="7" height="16" rx="2.5" fill="#1e6b4b" />
+              <rect x="3" y="32" width="7" height="16" rx="2.5" fill="#1e6b4b" />
+              <path d="M -14,46 L -2,46 L -2,56 L -16,56 Q -18,50 -14,46 Z" fill="#8c1118" />
+              <path d="M 2,46 L 14,46 Q 18,50 16,56 L 2,56 Z" fill="#8c1118" />
+              <path d="M -16,4 L 16,4 L 22,35 L -22,35 Z" fill="#e5c882" />
+              <path d="M -14,3 L 14,3 L 19,14 Q 0,18 -19,14 Z" fill="#b81d24" />
+              <rect x="-17" y="21" width="34" height="4.5" fill="#2b1911" />
+              <rect x="-4" y="19.5" width="8" height="7.5" rx="1.2" fill="none" stroke="#c82b24" stroke-width="1.6" />
+              <path d="M -15,9 L -26,-2 L -21,-6 L -12,6 Z" fill="#e5c882" />
+              <path d="M 15,9 L 23,23 L 18,26 L 11,13 Z" fill="#e5c882" />
+              <circle cx="-24" cy="-4" r="3.6" fill="#1e8c82" />
+              <circle cx="20.5" cy="24.5" r="3.6" fill="#1e8c82" />
+              <polygon points="-14,-12 -24,-15 -14,-7" fill="#f5c6a5" />
+              <polygon points="14,-12 24,-15 14,-7" fill="#f5c6a5" />
+              <circle cx="0" cy="-11" r="14.5" fill="#f5c6a5" />
+              <path d="M -14.5,-12 Q -13,-25 0,-25 Q 13,-25 14.5,-12 Q 7,-18 0,-16 Q -7,-18 -14.5,-12 Z" fill="#6e361c" />
+              <circle cx="-5" cy="-11" r="1.8" fill="#231612" />
+              <circle cx="5" cy="-11" r="1.8" fill="#231612" />
+              <circle cx="-8.5" cy="-7.5" r="2.6" fill="#eb7a70" opacity="0.65" />
+              <circle cx="8.5" cy="-7.5" r="2.6" fill="#eb7a70" opacity="0.65" />
+              <path d="M -4,-6.5 Q 0,-2.5 4,-6.5" fill="none" stroke="#8a2c24" stroke-width="1.7" stroke-linecap="round" />
+              <path d="M -13,-23 Q 4,-52 22,-34 Q 27,-28 23,-21 L 14,-23 Q 12,-30 2,-30 L -13,-23 Z" fill="#e8be58" />
+              <path d="M -13,-23 Q 0,-20 13,-23" fill="none" stroke="#b81d24" stroke-width="2.6" stroke-linecap="round" />
+              <circle cx="24" cy="-20" r="4.4" fill="#1e8c82" />
+            </g>
+
+            <!-- ===================== SANTA CLAUS & NOTICE BOARD ===================== -->
+            <g id="santa-and-notice">
+              <ellipse cx="0" cy="186" rx="50" ry="9" fill="#d7c6a5" />
+
+              <!-- Santa's Winter Boots -->
+              <path d="M -28,164 L -8,164 L -8,184 L -34,184 Q -36,174 -28,164 Z" fill="#2b1911" />
+              <path d="M 8,164 L 28,164 Q 36,174 34,184 L 8,184 Z" fill="#2b1911" />
+              <rect x="-30" y="160" width="24" height="7" rx="3.5" fill="#faf4e8" />
+              <rect x="6" y="160" width="24" height="7" rx="3.5" fill="#faf4e8" />
+
+              <!-- Santa's Red Coat Hem -->
+              <path d="M -48,144 L 48,144 L 54,162 L -54,162 Z" fill="url(#crimsonRibbonGrad)" />
+              <rect x="-55" y="157" width="110" height="8" rx="4" fill="#faf4e8" />
+
+              <!-- Santa's Shoulders & Fur-Trimmed Collar -->
+              <path d="M -46,66 Q -54,44 -26,38 L 26,38 Q 54,44 46,66 Z" fill="url(#crimsonRibbonGrad)" />
+              <path d="M -28,38 Q 0,48 28,38 Q 32,45 24,49 Q 0,55 -24,49 Q -32,45 -28,38 Z" fill="#faf4e8" />
+
+              <!-- Santa's Warm Face, Round Spectacles & Fluffy Beard -->
+              <circle cx="0" cy="20" r="22" fill="#f7c7a6" />
+              <circle cx="-11" cy="23" r="4.2" fill="#eb756c" opacity="0.6" />
+              <circle cx="11" cy="23" r="4.2" fill="#eb756c" opacity="0.6" />
+              <circle cx="-7.5" cy="16" r="2.2" fill="#231612" />
+              <circle cx="7.5" cy="16" r="2.2" fill="#231612" />
+              <circle cx="-7.5" cy="16" r="4.8" fill="none" stroke="#d9b256" stroke-width="1.1" />
+              <circle cx="7.5" cy="16" r="4.8" fill="none" stroke="#d9b256" stroke-width="1.1" />
+              <line x1="-2.7" y1="16" x2="2.7" y2="16" stroke="#d9b256" stroke-width="1.1" />
+              <path d="M -12,10.5 Q -7.5,8 -4,10.5" fill="none" stroke="#faf4e8" stroke-width="2.5" stroke-linecap="round" />
+              <path d="M 4,10.5 Q 7.5,8 12,10.5" fill="none" stroke="#faf4e8" stroke-width="2.5" stroke-linecap="round" />
+              <ellipse cx="0" cy="20.8" rx="4.2" ry="3.2" fill="#e0635a" />
+
+              <!-- Fluffy White Beard & Mustache -->
+              <path d="M -22,22 Q -27,42 -14,54 Q 0,63 14,54 Q 27,42 22,22 Q 14,32 0,32 Q -14,32 -22,22 Z" fill="#faf4e8" />
+              <path d="M 0,24 Q -10,21 -16,27 Q -10,31 0,27 Q 10,31 16,27 Q 10,21 0,24 Z" fill="#ffffff" stroke="#e6dfd3" stroke-width="0.6" />
+
+              <!-- Classic Red Santa Hat & Cream Pom-Pom -->
+              <path d="M -21,6 Q 0,-26 24,-10 Q 34,-3 36,10 L 26,12 Q 24,3 18,4 L -21,6 Z" fill="url(#crimsonRibbonGrad)" />
+              <rect x="-24" y="2" width="48" height="9" rx="4.5" fill="#faf4e8" />
+              <circle cx="36" cy="12" r="6.5" fill="#faf4e8" />
+
+              <!-- Cream-and-Gold Notice Board with "Invitation" -->
+              <g id="santa-notice-board" role="button" tabindex="0" aria-label="Open Elaia's 6th Birthday Invitation">
+                <rect id="notice-shadow" x="-80" y="61" width="160" height="106" rx="10" fill="#170f09" opacity="0.28" />
+                <rect id="notice-wood-frame" x="-79" y="59" width="158" height="104" rx="9" fill="url(#noticeFrameGrad)" stroke="#381b0a" stroke-width="1.5" />
+                <rect id="notice-parchment" x="-71" y="66" width="142" height="90" rx="5" fill="url(#parchmentFillGrad)" />
+                <rect id="notice-gold-border" x="-66" y="71" width="132" height="80" rx="3" fill="none" stroke="#c99a3e" stroke-width="1.3" opacity="0.88" />
+
+                <!-- Brass Corner Rivets -->
+                <circle id="rivet-tl" cx="-74" cy="64" r="2.2" fill="#f5d87e" />
+                <circle id="rivet-tr" cx="74" cy="64" r="2.2" fill="#f5d87e" />
+                <circle id="rivet-bl" cx="-74" cy="158" r="2.2" fill="#f5d87e" />
+                <circle id="rivet-br" cx="74" cy="158" r="2.2" fill="#f5d87e" />
+
+                <!-- Calligraphy Label: "Invitation" -->
+                <g id="notice-svg-text">
+                  <text
+                    x="0"
+                    y="120"
+                    text-anchor="middle"
+                    fill="#9c1914"
+                    font-family="'Great Vibes', 'Fredoka', cursive"
+                    font-size="31"
+                  >Invitation</text>
+                </g>
+              </g>
+
+              <!-- Santa's Crimson Mittens & White Fur Cuffs Holding the Board -->
+              <g id="santa-mittens">
+                <rect x="-87" y="102" width="11" height="18" rx="4" fill="#faf4e8" />
+                <rect x="-82" y="103" width="13" height="16" rx="7" fill="#b81d24" />
+                <ellipse cx="-74" cy="105" rx="4" ry="3" fill="#d62830" />
+
+                <rect x="76" y="102" width="11" height="18" rx="4" fill="#faf4e8" />
+                <rect x="69" y="103" width="13" height="16" rx="7" fill="#b81d24" />
+                <ellipse cx="74" cy="105" rx="4" ry="3" fill="#d62830" />
+              </g>
+            </g>
+          </g>
+
+          <!-- =================================================================
+               PLANE 2: GROUNDED COTTAGES, ICE LUMPS & SNOWDRIFTS
+               ================================================================= -->
+          <g id="plane-village" style="transform-origin: 225px 430px; opacity: 1;">
+
+            <path d="M -30,456 Q 112,418 235,442 Q 350,464 480,430 L 480,800 L -30,800 Z" fill="#f4ebd9" />
+
+            <!-- LEFT VILLAGE CLUSTER -->
+            <g id="village-left" style="transform-origin: 120px 380px; opacity: 1;">
+              <!-- Attached Cream Spire / Tall Chimney Structure on Left House Cluster -->
+              <g id="church-steeple" transform="translate(136, 248)">
+                <rect x="0" y="66" width="22" height="128" fill="#efe2c8" />
+                <rect x="0" y="66" width="22" height="6" fill="#c84b2c" />
+                <polygon points="-2,66 11,0 24,66" fill="#e8decb" />
+                <polygon points="11,0 24,66 11,66" fill="#d1c4ae" />
+              </g>
+              <g transform="translate(56, 288)">
+                <polygon points="36,16 46,16 46,34 36,28" fill="#9c2d17" />
+                <rect x="34" y="13" width="14" height="4" rx="1" fill="#f8f2e4" />
+                <polygon points="0,48 27,0 54,48 54,162 0,162" fill="#c84b2c" />
+                <rect x="54" y="48" width="16" height="114" fill="#9c2d17" />
+                <polyline points="-4,50 27,-2 58,50" fill="none" stroke="#f8f2e4" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" />
+                <rect x="22" y="25" width="9" height="13" rx="1" fill="#ffd966" />
+                <rect x="11" y="56" width="12" height="16" rx="1" fill="#ffd966" />
+                <rect x="31" y="56" width="12" height="16" rx="1" fill="#ffd966" />
+                <rect x="11" y="84" width="12" height="16" rx="1" fill="#ffd966" />
+                <rect x="31" y="84" width="12" height="16" rx="1" fill="#ffd966" />
+                <line x1="17" y1="56" x2="17" y2="72" stroke="#9c2d17" stroke-width="1.2" />
+                <line x1="11" y1="64" x2="23" y2="64" stroke="#9c2d17" stroke-width="1.2" />
+                <line x1="37" y1="56" x2="37" y2="72" stroke="#9c2d17" stroke-width="1.2" />
+                <line x1="31" y1="64" x2="43" y2="64" stroke="#9c2d17" stroke-width="1.2" />
+                <line x1="17" y1="84" x2="17" y2="100" stroke="#9c2d17" stroke-width="1.2" />
+                <line x1="11" y1="92" x2="23" y2="92" stroke="#9c2d17" stroke-width="1.2" />
+                <line x1="37" y1="84" x2="37" y2="100" stroke="#9c2d17" stroke-width="1.2" />
+                <line x1="31" y1="92" x2="43" y2="92" stroke="#9c2d17" stroke-width="1.2" />
+                <rect x="21" y="122" width="13" height="32" rx="2" fill="#592212" />
+              </g>
+
+              <g transform="translate(112, 292)">
+                <polygon points="8,14 18,14 18,36 8,42" fill="#c84b2c" />
+                <rect x="6" y="11" width="14" height="3.5" rx="1" fill="#f8f2e4" />
+                <polygon points="0,52 24,0 48,52 48,158 0,158" fill="#efe2c8" />
+                <polyline points="-3,53 24,-2 51,53" fill="none" stroke="#f8f2e4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M 11,72 L 11,60 Q 15,54 19,60 L 19,72 Z" fill="#cbb282" />
+                <path d="M 28,72 L 28,60 Q 32,54 36,60 L 36,72 Z" fill="#cbb282" />
+                <rect x="10" y="86" width="12" height="15" rx="1" fill="#ffd966" />
+                <rect x="26" y="86" width="12" height="15" rx="1" fill="#ffd966" />
+                <line x1="16" y1="86" x2="16" y2="101" stroke="#a6864e" stroke-width="1.2" />
+                <line x1="10" y1="93" x2="22" y2="93" stroke="#a6864e" stroke-width="1.2" />
+                <line x1="32" y1="86" x2="32" y2="101" stroke="#a6864e" stroke-width="1.2" />
+                <line x1="26" y1="93" x2="38" y2="93" stroke="#a6864e" stroke-width="1.2" />
+              </g>
+
+              <g id="golden-ochre-house" transform="translate(158, 324)">
+                <polygon points="28,9 36,9 36,24 28,20" fill="#b55b2b" />
+                <rect x="26" y="6.5" width="12" height="3" rx="0.8" fill="#f8f2e4" />
+                <polygon points="0,38 22,0 44,38 44,128 0,128" fill="#dfa255" />
+                <polyline points="-3,39 22,-2 47,39" fill="none" stroke="#f8f2e4" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M 9,60 L 9,50 Q 13,44 17,50 L 17,60 Z" fill="#ffd966" />
+                <path d="M 26,60 L 26,50 Q 30,44 34,50 L 34,60 Z" fill="#ffd966" />
+                <rect x="10" y="74" width="11" height="14" rx="1" fill="#ffd966" />
+                <rect x="25" y="74" width="11" height="14" rx="1" fill="#ffd966" />
+                <rect x="17" y="98" width="10" height="22" rx="1.5" fill="#6b3416" />
+              </g>
+
+              <g transform="translate(122, 360)">
+                <path d="M 0,0 C -8,18 -16,34 -24,48 L -13,48 C -19,62 -24,76 -29,88 L -16,88 C -22,102 -28,114 -33,126 L 33,126 C 28,114 22,102 16,88 L 29,88 C 24,76 19,62 13,48 L 24,48 C 16,34 8,18 0,0 Z" fill="#1d4237" />
+                <circle cx="-10" cy="64" r="3" fill="#c82b24" />
+                <circle cx="12" cy="76" r="3" fill="#c82b24" />
+                <circle cx="-14" cy="102" r="3.5" fill="#c82b24" />
+                <circle cx="14" cy="108" r="3.5" fill="#c82b24" />
+              </g>
+              <g transform="translate(198, 342)">
+                <path d="M 0,0 C -9,20 -18,38 -27,54 L -15,54 C -22,70 -28,84 -33,98 L -18,98 C -25,114 -31,126 -37,140 L 37,140 C 31,126 25,114 18,98 L 33,98 C 28,84 22,70 15,54 L 27,54 C 18,38 9,20 0,0 Z" fill="#132b24" />
+                <circle cx="-11" cy="68" r="3.2" fill="#c82b24" />
+                <circle cx="12" cy="82" r="3.2" fill="#c82b24" />
+                <circle cx="-15" cy="112" r="3.6" fill="#c82b24" />
+                <circle cx="16" cy="118" r="3.6" fill="#c82b24" />
+              </g>
+
+              <g id="ice-lumps-left">
+                <path d="M 78,488 C 82,474 96,472 106,478 C 115,468 134,470 142,481 C 152,477 162,482 164,492 L 74,494 Z" fill="url(#iceLumpGrad)" />
+                <path d="M 154,484 C 160,468 176,466 188,474 C 198,464 218,466 226,478 C 234,474 242,479 244,489 L 150,490 Z" fill="url(#iceLumpGrad)" />
+                <ellipse cx="122" cy="487" rx="18" ry="5.5" fill="#fffaf0" opacity="0.85" />
+                <ellipse cx="198" cy="483" rx="20" ry="6" fill="#fffaf0" opacity="0.85" />
+              </g>
+            </g>
+
+            <!-- RIGHT VILLAGE CLUSTER -->
+            <g id="village-right" style="transform-origin: 340px 380px; opacity: 1;">
+              <g transform="translate(292, 354)">
+                <rect x="64" y="-12" width="10" height="14" fill="#9c2d17" />
+                <rect x="62" y="-14" width="14" height="3.5" rx="1" fill="#f8f2e4" />
+                <polygon points="0,34 22,0 82,0 96,34" fill="#f8f2e4" />
+                <polygon points="4,34 22,4 40,34 40,96 4,96" fill="#c84b2c" />
+                <rect x="40" y="34" width="52" height="62" fill="#9c2d17" />
+                <rect x="13" y="46" width="16" height="14" rx="1" fill="#ffd966" />
+                <line x1="21" y1="46" x2="21" y2="60" stroke="#9c2d17" stroke-width="1.2" />
+                <rect x="52" y="45" width="14" height="13" rx="1" fill="#ffd966" />
+                <rect x="71" y="45" width="14" height="13" rx="1" fill="#ffd966" />
+                <rect x="52" y="65" width="14" height="13" rx="1" fill="#ffd966" />
+                <rect x="71" y="65" width="14" height="13" rx="1" fill="#ffd966" />
+              </g>
+
+              <g transform="translate(348, 326)">
+                <polygon points="9,10 17,10 17,28 9,33" fill="#c84b2c" />
+                <rect x="7.5" y="7.5" width="11" height="3" rx="0.8" fill="#f8f2e4" />
+                <polygon points="0,46 22,0 44,46 44,132 0,132" fill="#efe2c8" />
+                <polyline points="-3,47 22,-2 47,47" fill="none" stroke="#f8f2e4" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" />
+                <rect x="9" y="56" width="11" height="14" rx="1" fill="#ffd966" />
+                <rect x="24" y="56" width="11" height="14" rx="1" fill="#ffd966" />
+                <rect x="9" y="78" width="11" height="14" rx="1" fill="#ffd966" />
+                <rect x="24" y="78" width="11" height="14" rx="1" fill="#ffd966" />
+              </g>
+
+              <g transform="translate(284, 342)">
+                <path d="M 0,0 C -7,16 -14,28 -21,40 L -11,40 C -16,54 -21,66 -25,78 L -13,78 C -19,90 -24,100 -29,112 L 29,112 C 24,100 19,90 13,78 L 25,78 C 21,66 16,54 11,40 L 21,40 C 14,28 7,16 0,0 Z" fill="#1d4237" />
+                <circle cx="-8" cy="54" r="3" fill="#c82b24" />
+                <circle cx="10" cy="68" r="3" fill="#c82b24" />
+                <circle cx="-12" cy="92" r="3.2" fill="#c82b24" />
+              </g>
+
+              <g id="ice-lumps-right">
+                <path d="M 248,456 C 254,442 268,440 278,446 C 288,437 306,439 314,450 C 322,447 330,452 332,460 L 244,462 Z" fill="url(#iceLumpGrad)" />
+                <ellipse cx="284" cy="454" rx="18" ry="5" fill="#fffaf0" opacity="0.85" />
+              </g>
+            </g>
+
+            <!-- Undulating Cream-Ivory Foreground Snowdrifts -->
+            <path d="M -30,492 Q 95,456 225,498 Q 345,536 480,482 L 480,800 L -30,800 Z" fill="url(#snowHillFrontGrad)" />
+            <path d="M -30,545 Q 155,586 292,532 Q 395,496 480,530 L 480,800 L -30,800 Z" fill="#f4ebd9" />
+            <path d="M 45,526 Q 145,546 218,522 Q 140,564 45,526 Z" fill="#d7c6a5" opacity="0.6" />
+            <path d="M 245,556 Q 345,532 420,562 Q 335,552 245,556 Z" fill="#d7c6a5" opacity="0.6" />
+          </g>
+
+          <!-- =================================================================
+               PLANE 3: FOREGROUND CURVED PINE TREES, FOUR HANGING GOLD BAUBLES,
+                        THREE PILLAR CANDLES & RIBBON-WRAPPED GIFT BOXES
+               ================================================================= -->
+          <g id="plane-foreground" style="transform-origin: 225px 410px; opacity: 1;">
+
+            <g id="top-gold-baubles">
+              <g transform="translate(64, 0)">
+                <line x1="0" y1="0" x2="0" y2="48" stroke="#dfb84c" stroke-width="1.5" />
+                <rect x="-5" y="45" width="10" height="7" rx="1.5" fill="#c99e42" />
+                <circle cx="0" cy="78" r="27" fill="url(#goldSphereGrad)" />
+                <g stroke="#fff6cf" stroke-width="0.9" opacity="0.58">
+                  <line x1="0" y1="63" x2="0" y2="93" />
+                  <line x1="-15" y1="78" x2="15" y2="78" />
+                  <line x1="-11" y1="67" x2="11" y2="89" />
+                  <line x1="11" y1="67" x2="-11" y2="89" />
+                </g>
+                <path d="M 0,34 L -14,24 Q -18,33 -11,39 Z" fill="#c82b24" />
+                <path d="M 0,34 L 14,24 Q 18,33 11,39 Z" fill="#c82b24" />
+                <path d="M -2,36 L -11,50 L -5,51 L 0,38 Z" fill="#8c1510" />
+                <path d="M 2,36 L 11,50 L 5,51 L 0,38 Z" fill="#8c1510" />
+                <circle cx="0" cy="34" r="3.6" fill="#8c1510" />
+              </g>
+
+              <g transform="translate(140, 0)">
+                <line x1="0" y1="0" x2="0" y2="78" stroke="#dfb84c" stroke-width="1.3" />
+                <rect x="-4" y="75" width="8" height="5.5" rx="1" fill="#c99e42" />
+                <circle cx="0" cy="99" r="17.5" fill="url(#goldSphereGrad)" />
+                <g stroke="#fff6cf" stroke-width="0.7" opacity="0.5">
+                  <line x1="0" y1="89" x2="0" y2="109" />
+                  <line x1="-10" y1="99" x2="10" y2="99" />
+                </g>
+                <path d="M 0,68 L -9,62 Q -12,67 -8,71 Z" fill="#c82b24" />
+                <path d="M 0,68 L 9,62 Q 12,67 8,71 Z" fill="#c82b24" />
+                <path d="M -1.5,69 L -7,79 L -3.5,80 L 0,71 Z" fill="#8c1510" />
+                <path d="M 1.5,69 L 7,79 L 3.5,80 L 0,71 Z" fill="#8c1510" />
+                <circle cx="0" cy="68" r="2.6" fill="#8c1510" />
+              </g>
+
+              <g transform="translate(310, 0)">
+                <line x1="0" y1="0" x2="0" y2="78" stroke="#dfb84c" stroke-width="1.3" />
+                <rect x="-4" y="75" width="8" height="5.5" rx="1" fill="#c99e42" />
+                <circle cx="0" cy="99" r="17.5" fill="url(#goldSphereGrad)" />
+                <g stroke="#fff6cf" stroke-width="0.7" opacity="0.5">
+                  <line x1="0" y1="89" x2="0" y2="109" />
+                  <line x1="-10" y1="99" x2="10" y2="99" />
+                </g>
+                <path d="M 0,68 L -9,62 Q -12,67 -8,71 Z" fill="#c82b24" />
+                <path d="M 0,68 L 9,62 Q 12,67 8,71 Z" fill="#c82b24" />
+                <path d="M -1.5,69 L -7,79 L -3.5,80 L 0,71 Z" fill="#8c1510" />
+                <path d="M 1.5,69 L 7,79 L 3.5,80 L 0,71 Z" fill="#8c1510" />
+                <circle cx="0" cy="68" r="2.6" fill="#8c1510" />
+              </g>
+
+              <g transform="translate(386, 0)">
+                <line x1="0" y1="0" x2="0" y2="48" stroke="#dfb84c" stroke-width="1.5" />
+                <rect x="-5" y="45" width="10" height="7" rx="1.5" fill="#c99e42" />
+                <circle cx="0" cy="78" r="27" fill="url(#goldSphereGrad)" />
+                <g stroke="#fff6cf" stroke-width="0.9" opacity="0.58">
+                  <line x1="0" y1="63" x2="0" y2="93" />
+                  <line x1="-15" y1="78" x2="15" y2="78" />
+                  <line x1="-11" y1="67" x2="11" y2="89" />
+                  <line x1="11" y1="67" x2="-11" y2="89" />
+                </g>
+                <path d="M 0,34 L -14,24 Q -18,33 -11,39 Z" fill="#c82b24" />
+                <path d="M 0,34 L 14,24 Q 18,33 11,39 Z" fill="#c82b24" />
+                <path d="M -2,36 L -11,50 L -5,51 L 0,38 Z" fill="#8c1510" />
+                <path d="M 2,36 L 11,50 L 5,51 L 0,38 Z" fill="#8c1510" />
+                <circle cx="0" cy="34" r="3.6" fill="#8c1510" />
+              </g>
+            </g>
+
+            <!-- LEFT FRAMING PINE TREE -->
+            <g id="framing-tree-left">
+              <path d="M -30,68 C -6,96 16,128 36,162 C 24,160 12,156 2,150 C 22,182 40,214 58,248 C 42,244 26,238 12,230 C 34,268 54,308 76,348 C 56,342 36,334 18,324 C 44,368 68,414 96,462 C 72,454 48,444 26,432 C 56,482 86,534 118,588 C 88,578 58,566 32,550 C 66,606 98,664 134,724 C 98,712 62,698 30,680 L 118,780 L -30,780 Z" fill="#132b24" />
+              <path d="M -30,86 C -10,112 10,140 28,170 C 16,167 6,162 -4,156 C 14,186 30,216 46,248 C 32,244 18,238 6,230 C 26,266 44,302 64,340 C 46,334 28,326 12,316 C 36,358 58,402 82,448 C 60,440 38,430 18,418 C 46,466 72,516 102,568 C 74,558 48,546 24,532 C 54,586 84,640 116,698 C 82,686 50,672 20,656 L 96,766 L -30,766 Z" fill="#1d4237" />
+              <path d="M -30,110 C -14,132 2,156 18,180 C 8,177 0,172 -8,166 C 8,194 22,222 36,250 C 24,246 12,240 2,232 C 18,264 34,298 50,332 C 34,326 20,318 6,308 C 26,346 46,386 68,428 C 48,420 30,410 12,398 C 36,442 58,488 84,536 C 60,526 38,514 16,500 C 42,548 68,598 96,650 C 66,638 38,624 12,608 L 72,745 L -30,745 Z" fill="#2b5b4c" />
+
+              <path d="M -8,282 Q 26,310 56,294" fill="none" stroke="#c82b24" stroke-width="5.2" stroke-linecap="round" stroke-dasharray="1 7.5" />
+              <path d="M -8,484 Q 44,520 88,494" fill="none" stroke="#c82b24" stroke-width="6" stroke-linecap="round" stroke-dasharray="1 8.5" />
+
+              <line x1="18" y1="176" x2="18" y2="196" stroke="#dfb84c" stroke-width="1" />
+              <circle cx="18" cy="204" r="7.5" fill="url(#crimsonSphereGrad)" />
+              <line x1="10" y1="306" x2="10" y2="332" stroke="#dfb84c" stroke-width="1" />
+              <circle cx="10" cy="342" r="9.5" fill="url(#crimsonSphereGrad)" />
+              <line x1="54" y1="428" x2="54" y2="452" stroke="#dfb84c" stroke-width="1" />
+              <circle cx="54" cy="462" r="8.8" fill="url(#crimsonSphereGrad)" />
+              <line x1="38" y1="534" x2="38" y2="558" stroke="#dfb84c" stroke-width="1" />
+              <circle cx="38" cy="568" r="9.5" fill="url(#crimsonSphereGrad)" />
+              <line x1="78" y1="636" x2="78" y2="662" stroke="#dfb84c" stroke-width="1" />
+              <circle cx="78" cy="672" r="10.8" fill="url(#crimsonSphereGrad)" />
+            </g>
+
+            <!-- RIGHT FRAMING PINE TREE -->
+            <g id="framing-tree-right">
+              <path d="M 480,68 C 456,96 434,128 414,162 C 426,160 438,156 448,150 C 428,182 410,214 392,248 C 408,244 424,238 438,230 C 416,268 396,308 374,348 C 394,342 414,334 432,324 C 406,368 382,414 354,462 C 378,454 402,444 424,432 C 394,482 364,534 332,588 C 362,578 392,566 418,550 C 384,606 352,664 316,724 C 352,712 388,698 420,680 L 332,780 L 480,780 Z" fill="#132b24" />
+              <path d="M 480,86 C 460,112 440,140 422,170 C 434,167 444,162 454,156 C 436,186 420,216 404,248 C 418,244 432,238 444,230 C 424,266 406,302 386,340 C 404,334 422,326 438,316 C 414,358 392,402 368,448 C 390,440 412,430 432,418 C 404,466 378,516 348,568 C 376,558 402,546 426,532 C 396,586 366,640 334,698 C 368,686 400,672 430,656 L 354,766 L 480,766 Z" fill="#1d4237" />
+              <path d="M 480,110 C 464,132 448,156 432,180 C 442,177 450,172 458,166 C 442,194 428,222 414,250 C 426,246 438,240 448,232 C 432,264 416,298 400,332 C 416,326 430,318 444,308 C 424,346 404,386 382,428 C 402,420 420,410 438,398 C 414,442 392,488 366,536 C 390,526 412,514 434,500 C 408,548 382,598 354,650 C 384,638 412,624 438,608 L 378,745 L 480,745 Z" fill="#2b5b4c" />
+
+              <path d="M 458,282 Q 424,310 394,294" fill="none" stroke="#c82b24" stroke-width="5.2" stroke-linecap="round" stroke-dasharray="1 7.5" />
+              <path d="M 458,484 Q 406,520 362,494" fill="none" stroke="#c82b24" stroke-width="6" stroke-linecap="round" stroke-dasharray="1 8.5" />
+
+              <line x1="432" y1="176" x2="432" y2="196" stroke="#dfb84c" stroke-width="1" />
+              <circle cx="432" cy="204" r="7.5" fill="url(#crimsonSphereGrad)" />
+              <line x1="440" y1="306" x2="440" y2="332" stroke="#dfb84c" stroke-width="1" />
+              <circle cx="440" cy="342" r="9.5" fill="url(#crimsonSphereGrad)" />
+              <line x1="396" y1="428" x2="396" y2="452" stroke="#dfb84c" stroke-width="1" />
+              <circle cx="396" cy="462" r="8.8" fill="url(#crimsonSphereGrad)" />
+              <line x1="412" y1="534" x2="412" y2="558" stroke="#dfb84c" stroke-width="1" />
+              <circle cx="412" cy="568" r="9.5" fill="url(#crimsonSphereGrad)" />
+              <line x1="372" y1="636" x2="372" y2="662" stroke="#dfb84c" stroke-width="1" />
+              <circle cx="372" cy="672" r="10.8" fill="url(#crimsonSphereGrad)" />
+            </g>
+
+            <!-- Rich Crimson Ground Border Band -->
+            <rect x="0" y="754" width="450" height="50" fill="#a3291d" />
+
+            <!-- BOTTOM LEFT: THREE GLOWING PILLAR CANDLES & CRIMSON GIFT BOXES -->
+            <g id="bottom-left-decor">
+              <g transform="translate(68, 742)">
+                <rect x="0" y="6" width="48" height="36" rx="2" fill="url(#crimsonRibbonGrad)" />
+                <rect x="-2" y="2" width="52" height="7" rx="1.5" fill="#d62830" />
+                <rect x="20" y="2" width="8" height="40" fill="#e6453b" />
+                <path d="M 24,2 L 10,-7 Q 6,0 13,4 Z" fill="#e6453b" />
+                <path d="M 24,2 L 38,-7 Q 42,0 35,4 Z" fill="#e6453b" />
+              </g>
+
+              <g transform="translate(132, 728)">
+                <rect x="0" y="6" width="42" height="44" rx="2" fill="#8c1510" />
+                <rect x="-2" y="2" width="46" height="6" rx="1" fill="#b81d24" />
+                <rect x="17" y="2" width="7" height="48" fill="#f5d87e" />
+                <path d="M 20.5,2 L 9,-6 Q 5,0 12,4 Z" fill="#8c1510" />
+                <path d="M 20.5,2 L 32,-6 Q 36,0 29,4 Z" fill="#8c1510" />
+              </g>
+
+              <g transform="translate(30, 720)">
+                <circle cx="14" cy="-6" r="34" fill="url(#candleHaloGrad)" />
+                <rect x="0" y="4" width="28" height="68" rx="3" fill="url(#candleBodyGrad)" />
+                <ellipse cx="14" cy="4" rx="14" ry="3.5" fill="#fff2cf" />
+                <line x1="2" y1="18" x2="26" y2="18" stroke="#ffd58c" stroke-width="0.9" opacity="0.55" />
+                <line x1="2" y1="26" x2="26" y2="26" stroke="#ffd58c" stroke-width="0.9" opacity="0.55" />
+                <line x1="2" y1="34" x2="26" y2="34" stroke="#ffd58c" stroke-width="0.9" opacity="0.55" />
+                <path class="candle-flame" d="M 14,-15 Q 19,-4 14,1 Q 9,-4 14,-15 Z" fill="#fff8db" />
+              </g>
+
+              <g transform="translate(40, 756)">
+                <circle cx="13" cy="-5" r="28" fill="url(#candleHaloGrad)" />
+                <rect x="0" y="3" width="26" height="42" rx="3" fill="url(#candleBodyGrad)" />
+                <ellipse cx="13" cy="3" rx="13" ry="3" fill="#fff2cf" />
+                <line x1="2" y1="15" x2="24" y2="15" stroke="#ffd58c" stroke-width="0.8" opacity="0.55" />
+                <line x1="2" y1="22" x2="24" y2="22" stroke="#ffd58c" stroke-width="0.8" opacity="0.55" />
+                <path class="candle-flame" d="M 13,-13 Q 17.5,-3 13,1 Q 8.5,-3 13,-13 Z" fill="#fff8db" />
+              </g>
+
+              <g transform="translate(148, 760)">
+                <circle cx="12" cy="-5" r="25" fill="url(#candleHaloGrad)" />
+                <rect x="0" y="3" width="24" height="38" rx="3" fill="url(#candleBodyGrad)" />
+                <ellipse cx="12" cy="3" rx="12" ry="2.8" fill="#fff2cf" />
+                <line x1="2" y1="14" x2="22" y2="14" stroke="#ffd58c" stroke-width="0.8" opacity="0.55" />
+                <line x1="2" y1="20" x2="22" y2="20" stroke="#ffd58c" stroke-width="0.8" opacity="0.55" />
+                <path class="candle-flame" d="M 12,-12 Q 16,-3 12,1 Q 8,-3 12,-12 Z" fill="#fff8db" />
+              </g>
+            </g>
+
+            <!-- BOTTOM RIGHT: LARGE ILLUSTRATED CRIMSON RIBBON GIFT BOX -->
+            <g id="bottom-right-gift" transform="translate(310, 686)">
+              <polygon points="0,24 60,36 60,112 0,96" fill="#a31c16" />
+              <polygon points="60,36 104,22 104,96 60,112" fill="#730e0a" />
+              <polygon points="-4,16 60,28 108,14 44,4" fill="#d62830" />
+              <polygon points="-4,16 60,28 60,38 -4,26" fill="#b81d24" />
+              <polygon points="60,28 108,14 108,24 60,38" fill="#8c1510" />
+              <polygon points="23,20 34,22 34,105 23,102" fill="#730e0a" />
+              <polygon points="78,22 88,19 88,102 78,105" fill="#540805" />
+              <path d="M 54,14 C 32,-6 14,2 24,16 C 32,22 48,18 54,14 Z" fill="#8c1510" stroke="#d62830" stroke-width="1" />
+              <path d="M 54,14 C 74,-8 94,0 84,15 C 76,21 60,18 54,14 Z" fill="#8c1510" stroke="#d62830" stroke-width="1" />
+              <ellipse cx="54" cy="14" rx="7.5" ry="5" fill="#b81d24" />
+            </g>
+          </g>
+
+          <!-- =================================================================
+               PLANE 4: STAGE 1 ARCHED OPENING TYPOGRAPHY
+               ================================================================= -->
+          <g id="stage1-typography" filter="url(#archShadowFilter)">
+            <text
+              fill="url(#goldFoilGrad)"
+              font-family="'Great Vibes', 'Fredoka', cursive"
+              font-size="25.5"
+              font-weight="400"
+              letter-spacing="0.3"
+            >
+              <textPath xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#archMainHeadingPath" href="#archMainHeadingPath" startOffset="50%" text-anchor="middle">
+                It’s That Time of the Year,
+              </textPath>
+            </text>
+          </g>
+        </svg>
+
+        <!-- =====================================================================
+             2D CANVAS LAYERED SNOWFALL (Active from p = 0)
+             ===================================================================== -->
+        <canvas
+          id="snow-canvas"
+          class="absolute inset-0 w-full h-full pointer-events-none"
+        ></canvas>
+
+      </div>
+
+  <!-- Persistent Bottom Scroll Prompt (Crimson Red Glow; switches to KEEP SCROLLING DOWN inside invitation) -->
+  <div id="persistent-scroll-cue" aria-hidden="true">
+    <span
+      id="persistent-scroll-cue-text"
+      style="
+        font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 11.5px;
+        font-weight: 800;
+        letter-spacing: 0.22em;
+        color: #fdf6e2;
+        text-shadow:
+          0 0 8px rgba(217, 78, 67, 0.95),
+          0 0 16px rgba(184, 29, 36, 0.85),
+          0 1px 3px rgba(115, 14, 10, 0.95);
+        text-transform: uppercase;
+        transition: color 0.35s ease, text-shadow 0.35s ease, opacity 0.3s ease;
+      "
+    >KEEP SCROLLING UP</span>
+  </div>
+
+  <!-- Warm Cream Handoff Veil -->
+  <div id="cream-handoff-veil" aria-hidden="true"></div>
+
+  <!-- =========================================================================
+       SMOOTH CROSS-DISSOLVE & GLIDE TRANSITION SHELL INTO PART 2
+       ========================================================================= -->
+  <div id="invitation-reveal-shell" aria-hidden="true">
+
+    <!-- Ambient Soft Falling Snow Canvas -->
+    <canvas class="snow-canvas" id="snowCanvas" aria-hidden="true"></canvas>
+
+    <!-- Impact-Only 2D Ballistic Confetti Layer -->
+    <div class="confetti-burst-layer" id="confettiBurstLayer" aria-hidden="true"></div>
+
+    <!-- Top Triangular Pennant Bunting -->
+    <header class="bunting-header">
+      <svg class="bunting-svg" viewBox="0 0 600 44" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,2 Q300,14 600,2" fill="none" stroke="#d5ccc4" stroke-width="1.5" />
+        <g id="buntingFlags"></g>
+      </svg>
+    </header>
+
+    <!-- Floating Top-Right Controls: Back to Winter Village, Jump to Countdown & Festive Music -->
+    <div class="top-actions">
+      <button class="back-village-btn" id="backToVillageBtn" type="button" title="Back to Winter Village" aria-label="Back to Winter Village">
+        <span>←</span>
+        <span>Winter Village</span>
+      </button>
+      <button class="icon-pill-btn" id="jumpCountdownBtn" type="button" title="Jump to Countdown" aria-label="Jump to Countdown">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="3"></rect>
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+        </svg>
+      </button>
+      <button class="icon-pill-btn" id="audioToggleBtn" type="button" title="Play Festive Chime" aria-label="Toggle Festive Music">
+        <svg id="audioIconOn" style="display:none;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+        </svg>
+        <svg id="audioIconOff" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <line x1="23" y1="9" x2="17" y2="15"></line>
+          <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- =======================================================================
+         PART 2: ELAIA'S 6TH BIRTHDAY INVITATION
+         ======================================================================= -->
+    <div class="page-container" id="pageContainer">
+
+      <!-- Left Column: Scroll-Driven & Scrubbable Brick Chimney Track -->
+      <aside class="chimney-column" id="chimneyColumn" aria-label="Interactive Santa Chimney Animation">
+        <div class="chimney-shaft" id="chimneyShaft">
+          <div class="chimney-top-cap"></div>
+          <div class="chimney-dots"></div>
+
+          <!-- Santa Character Moving Smoothly Along Chimney -->
+          <div class="santa-actor" id="santaActor">
+            <div class="santa-speech-bubble" id="santaBubble">ON MY WAY TO ELAIA’S!</div>
+            <div class="santa-svg-wrap" id="santaSvgWrap">
+              <svg viewBox="0 0 140 160" width="100%" height="100%" overflow="visible">
+                <defs>
+                  <filter id="stickerOutline" x="-16%" y="-16%" width="132%" height="132%">
+                    <feMorphology in="SourceAlpha" result="DILATED" operator="dilate" radius="2.4"/>
+                    <feFlood flood-color="#fdfbf9" flood-opacity="0.92" result="WHITE"/>
+                    <feComposite in="WHITE" in2="DILATED" operator="in" result="OUTLINE"/>
+                    <feMerge>
+                      <feMergeNode in="OUTLINE"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                </defs>
+
+                <!-- POSE A: Upright & Tumbling Santa -->
+                <g id="santaTumbleGroup" filter="url(#stickerOutline)" style="opacity: 1;">
+                  <path d="M88 54 C112 52, 126 76, 118 102 C112 118, 92 120, 82 112 Z" fill="#8b6239" stroke="#5e3f20" stroke-width="3"/>
+                  <rect x="92" y="45" width="16" height="14" rx="3" transform="rotate(18 100 52)" fill="#63a496" stroke="#254e46" stroke-width="2.5"/>
+
+                  <path d="M46 72 L22 46" stroke="#d9382e" stroke-width="15" stroke-linecap="round"/>
+                  <circle cx="20" cy="44" r="8.5" fill="#ffffff" stroke="#d6dfe4" stroke-width="2"/>
+                  <path d="M94 72 L118 46" stroke="#d9382e" stroke-width="15" stroke-linecap="round"/>
+                  <circle cx="120" cy="44" r="8.5" fill="#ffffff" stroke="#d6dfe4" stroke-width="2"/>
+
+                  <g id="tumbleLeftLeg">
+                    <rect x="44" y="112" width="18" height="22" rx="4" fill="#d9382e"/>
+                    <rect x="40" y="128" width="24" height="14" rx="5" fill="#1e1e1e"/>
+                  </g>
+                  <g id="tumbleRightLeg">
+                    <rect x="78" y="112" width="18" height="22" rx="4" fill="#d9382e"/>
+                    <rect x="76" y="128" width="24" height="14" rx="5" fill="#1e1e1e"/>
+                  </g>
+
+                  <rect x="40" y="60" width="60" height="58" rx="22" fill="#d9382e"/>
+                  <rect x="39" y="84" width="62" height="12" fill="#1e1e1e"/>
+                  <rect x="60" y="80" width="20" height="20" rx="4" fill="none" stroke="#f3c64f" stroke-width="4.5"/>
+                  <rect x="38" y="108" width="64" height="11" rx="5.5" fill="#ffffff"/>
+
+                  <g id="santaStorybookHead">
+                    <path d="M50 28 H90 V45 C90 56, 81 62, 70 62 C59 62, 50 56, 50 45 Z" fill="#f6c3a2"/>
+                    <path d="M50 38 C49 44, 47 49, 46 53 C43 52, 40 50, 39 48 C39 56, 44 63, 51 64 C56 71, 63 74, 70 74 C77 74, 84 71, 89 64 C96 63, 101 56, 101 48 C100 50, 97 52, 94 53 C93 49, 91 44, 90 38 C86 44, 79 47, 70 47 C61 47, 54 44, 50 38 Z" fill="#f6f3ec"/>
+                    <circle cx="57" cy="43.5" r="5.2" fill="#f1988c"/>
+                    <circle cx="83" cy="43.5" r="5.2" fill="#f1988c"/>
+                    <circle cx="61.5" cy="36.5" r="2.7" fill="#2b1a16"/>
+                    <circle cx="78.5" cy="36.5" r="2.7" fill="#2b1a16"/>
+                    <circle cx="61.5" cy="36.5" r="6.3" fill="none" stroke="#caa558" stroke-width="2.1"/>
+                    <circle cx="78.5" cy="36.5" r="6.3" fill="none" stroke="#caa558" stroke-width="2.1"/>
+                    <line x1="67.8" y1="36.5" x2="72.2" y2="36.5" stroke="#caa558" stroke-width="2.1" stroke-linecap="round"/>
+                    <ellipse cx="70" cy="42.2" rx="5.2" ry="3.6" fill="#dc5a52"/>
+                    <path d="M51.5 49.5 C55.5 44.5, 65.5 44.5, 70 47.5 C74.5 44.5, 84.5 44.5, 88.5 49.5 C83 52, 74.5 51.5, 70 49.5 C65.5 51.5, 57 52, 51.5 49.5 Z" fill="#fafafa" stroke="#e4e0d8" stroke-width="0.6" stroke-linejoin="round"/>
+                    <path d="M48 25 C50 8, 72 4, 86 11 C97 16, 102 26, 102 36 L88 33 C87 28, 84 26, 78 26 L48 25 Z" fill="#b92721"/>
+                    <rect x="44" y="21.5" width="52" height="10.5" rx="5.25" fill="#f6f3ec"/>
+                    <circle cx="98.5" cy="36.5" r="6.8" fill="#f6f3ec"/>
+                  </g>
+                </g>
+
+                <!-- POSE B: Stuck Butt-Up on Fireplace Mantel -->
+                <g id="santaButtUpGroup" style="display:none; opacity: 0;">
+                  <g class="mantel-smoke-puff">
+                    <circle cx="31" cy="133" r="15" fill="#dde4ea"/>
+                    <circle cx="44" cy="136" r="12" fill="#edf1f5"/>
+                    <circle cx="109" cy="133" r="15" fill="#dde4ea"/>
+                    <circle cx="96" cy="136" r="12" fill="#edf1f5"/>
+                  </g>
+
+                  <polygon points="26,80 29,87 36,90 29,93 26,100 23,93 16,90 23,87" fill="#f3c64f" stroke="#b57b1c" stroke-width="1.4"/>
+                  <polygon points="114,80 117,87 124,90 117,93 114,100 111,93 104,90 111,87" fill="#f3c64f" stroke="#b57b1c" stroke-width="1.4"/>
+
+                  <g filter="url(#stickerOutline)">
+                    <g id="buttLegLeftGroup">
+                      <path d="M35 66 L55 62 L61 98 L40 100 Z" fill="#d9382e" stroke="#9e221b" stroke-width="2.2" stroke-linejoin="round"/>
+                      <rect x="30" y="57" width="26" height="10" rx="5" transform="rotate(-11 43 62)" fill="#ffffff"/>
+                      <path d="M27 42 L53 37 L55 57 L30 61 Z" fill="#1e1e1e"/>
+                    </g>
+
+                    <g id="buttLegRightGroup">
+                      <path d="M85 62 L105 66 L100 100 L79 98 Z" fill="#d9382e" stroke="#9e221b" stroke-width="2.2" stroke-linejoin="round"/>
+                      <rect x="84" y="57" width="26" height="10" rx="5" transform="rotate(11 97 62)" fill="#ffffff"/>
+                      <path d="M87 37 L113 42 L110 61 L85 57 Z" fill="#1e1e1e"/>
+                    </g>
+
+                    <path d="M40 124 C32 95, 48 80, 70 84 C92 80, 108 95, 100 124 Z" fill="#d9382e" stroke="#9e221b" stroke-width="2.4" stroke-linejoin="round"/>
+                    <path d="M70 89 Q68 106 70 123" fill="none" stroke="#8c1d17" stroke-width="3.2" stroke-linecap="round"/>
+
+                    <rect x="38" y="121" width="64" height="11" rx="5.5" fill="#ffffff"/>
+                    <rect x="40" y="131" width="60" height="12" rx="2" fill="#1e1e1e"/>
+                    <rect x="61" y="128" width="18" height="18" rx="4" fill="#1e1e1e" stroke="#f3c64f" stroke-width="4.2"/>
+                  </g>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fireplace Base -->
+        <div class="fireplace-base" id="fireplaceBase">
+          <div class="fireplace-mantel"></div>
+          <div class="fireplace-hearth">
+            <div class="fire-flame"></div>
+          </div>
+          <div class="fireplace-gifts">
+            <div class="mini-gift pink"></div>
+            <div class="mini-gift mint"></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right Column: 4 Mint-Bordered White Cards -->
+      <div class="cards-column">
+
+        <!-- CARD 1: Hero Title, Event Details, Save the Date & Maps, + 2x3 Holiday Sticker Grid -->
+        <section class="invite-card" aria-label="Invitation Details">
+          <div class="hero-icons-row">
+            <svg class="hero-sticker gift-anim" viewBox="0 0 64 64" aria-label="Pink Gift Box">
+              <rect x="12" y="24" width="40" height="32" rx="4" fill="#e35d53"/>
+              <rect x="9" y="18" width="46" height="8" rx="3" fill="#ee7a70"/>
+              <rect x="29" y="18" width="6" height="38" fill="#77b3a6"/>
+              <path d="M32 18 C24 10, 16 14, 24 18 Z" fill="#63a496"/>
+              <path d="M32 18 C40 10, 48 14, 40 18 Z" fill="#63a496"/>
+            </svg>
+            <svg class="hero-sticker bell-anim" viewBox="0 0 64 64" aria-label="Holiday Bell">
+              <circle cx="32" cy="52" r="5" fill="#4f6d66"/>
+              <path d="M32 14 C20 14, 16 28, 12 44 L52 44 C48 28, 44 14, 32 14 Z" fill="#8c6249"/>
+              <rect x="10" y="43" width="44" height="5" rx="2.5" fill="#4f6d66"/>
+              <path d="M32 14 C23 8, 17 13, 25 17 Z" fill="#e35d53"/>
+              <path d="M32 14 C41 8, 47 13, 39 17 Z" fill="#e35d53"/>
+              <circle cx="32" cy="14" r="3" fill="#d94e43"/>
+            </svg>
+            <svg class="hero-sticker stocking-anim" viewBox="0 0 64 64" aria-label="Christmas Stocking">
+              <g transform="rotate(-10 32 32)">
+                <path d="M24 12 H44 V38 C44 48, 36 54, 24 54 C16 54, 13 48, 16 42 C18 38, 24 38, 24 34 Z" fill="#ffffff" stroke="#8b685b" stroke-width="2"/>
+                <path d="M24 26 H44 V33 H24 Z" fill="#89bdb2"/>
+                <path d="M16 42 C13 48, 16 54, 24 54 L26 42 Z" fill="#d94e43"/>
+                <rect x="22" y="10" width="24" height="8" rx="3" fill="#d94e43"/>
+              </g>
+            </svg>
+          </div>
+
+          <p class="kicker-font">JINGLE ALL THE WAY TO</p>
+          <h1 class="celebrant-name">Elaia’s</h1>
+          <p class="celebrant-milestone">6th birthday</p>
+
+          <div class="event-details-box">
+            <p class="event-datetime">Monday, December 7th at 2:30 pm</p>
+            <p class="event-venue">Santa’s Mini Workshop</p>
+            <p class="event-address">Gärtnerstraße 59, Top 1 • 5020 Salzburg, Austria</p>
+            <p class="event-address" style="margin-bottom: 12px; font-weight: 700; color: var(--forest-dark);">Bring your smiles, parents are invited to stay and join the adventure!</p>
+            <div class="event-actions-row">
+              <a
+                href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Elaia%E2%80%99s+6th+birthday&dates=20261207T133000Z/20261207T163000Z&details=Join+us+to+celebrate+Elaia%E2%80%99s+6th+birthday!+Festive+Attire.+Bring+your+smiles%2C+parents+are+invited+to+stay+and+join+the+adventure!&location=Santa%E2%80%99s+Mini+Workshop+-+G%C3%A4rtnerstra%C3%9Fe+59%2C+Top+1%2C+5020+Salzburg%2C+Austria"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="event-action-pill save-date"
+                id="saveDateHeroBtn"
+              >
+                <span>📅</span>
+                <span>Save the Date</span>
+              </a>
+              <a href="https://www.google.com/maps/search/?api=1&query=G%C3%A4rtnerstra%C3%9Fe+59%2C+Top+1%2C+5020+Salzburg%2C+Austria" target="_blank" rel="noopener noreferrer" class="event-action-pill open-maps">
+                <span>📍</span>
+                <span>Open in Maps</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="sticker-grid" aria-label="Holiday Stickers">
+            <div class="sticker-item">
+              <svg width="44" height="44" viewBox="0 0 64 64">
+                <polygon points="32,6 39,23 58,24 43,36 48,54 32,44 16,54 21,36 6,24 25,23" fill="#a96e46" stroke="#ffffff" stroke-width="2"/>
+                <polygon points="32,12 37,25 51,26 40,35 44,48 32,40 20,48 24,35 13,26 27,25" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="3 2"/>
+              </svg>
+            </div>
+            <div class="sticker-item">
+              <svg width="42" height="42" viewBox="0 0 64 64">
+                <path d="M32 54 C32 54, 10 39, 10 23 C10 15, 16 10, 23 10 C27 10, 30 12, 32 16 C34 12, 37 10, 41 10 C48 10, 54 15, 54 23 C54 39, 32 54, 32 54 Z" fill="#d94e43"/>
+                <path d="M32 49 C32 49, 14 36, 14 23 C14 17, 18 14, 23 14 C27 14, 30 16, 32 20 C34 16, 37 14, 41 14 C46 14, 50 17, 50 23 C50 36, 32 49, 32 49 Z" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-dasharray="3 3"/>
+              </svg>
+            </div>
+            <div class="sticker-item">
+              <svg width="44" height="44" viewBox="0 0 64 64">
+                <rect x="16" y="28" width="32" height="26" rx="2" fill="#b4784e"/>
+                <polygon points="10,30 32,12 54,30" fill="#d94e43"/>
+                <path d="M10,30 L32,12 L54,30" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
+                <rect x="27" y="38" width="10" height="16" rx="5" fill="#77b3a6" stroke="#ffffff" stroke-width="2"/>
+              </svg>
+            </div>
+            <div class="sticker-item">
+              <svg width="46" height="46" viewBox="0 0 64 64">
+                <rect x="28" y="48" width="8" height="8" fill="#8c6249"/>
+                <polygon points="32,10 18,28 46,28" fill="#83b9ae"/>
+                <polygon points="32,20 14,39 50,39" fill="#77b3a6"/>
+                <polygon points="32,30 10,50 54,50" fill="#68a799"/>
+                <polygon points="32,5 34,10 39,10 35,13 36,18 32,15 28,18 29,13 25,10 30,10" fill="#f3c64f"/>
+                <circle cx="28" cy="25" r="2.5" fill="#d94e43"/>
+                <circle cx="37" cy="34" r="2.5" fill="#d94e43"/>
+                <circle cx="23" cy="43" r="2.5" fill="#f3c64f"/>
+                <circle cx="41" cy="44" r="2.5" fill="#d94e43"/>
+              </svg>
+            </div>
+            <div class="sticker-item">
+              <svg width="44" height="44" viewBox="0 0 64 64">
+                <path d="M46 28 H51 C55 28, 57 31, 57 35 C57 39, 55 42, 51 42 H46" fill="none" stroke="#e35d53" stroke-width="4.5" stroke-linecap="round"/>
+                <rect x="16" y="22" width="32" height="28" rx="8" fill="#e35d53"/>
+                <ellipse cx="32" cy="23" rx="14" ry="4" fill="#6e4230"/>
+                <rect x="23" y="20" width="5" height="4" rx="1" fill="#ffffff"/>
+                <rect x="30" y="21" width="5" height="4" rx="1" fill="#ffffff"/>
+                <rect x="37" y="20" width="5" height="4" rx="1" fill="#ffffff"/>
+                <path d="M32 42 C32 42, 26 37, 26 33 C26 31, 28 30, 30 30 C31 30, 32 31, 32 32 C32 31, 33 30, 34 30 C36 30, 38 31, 38 33 C38 37, 32 42, 32 42 Z" fill="#ffffff"/>
+              </svg>
+            </div>
+            <div class="sticker-item">
+              <svg width="44" height="44" viewBox="0 0 64 64">
+                <rect x="28" y="10" width="8" height="6" rx="1.5" fill="#f3c64f"/>
+                <circle cx="32" cy="10" r="3" fill="none" stroke="#f3c64f" stroke-width="2"/>
+                <circle cx="32" cy="36" r="20" fill="#e35d53"/>
+                <circle cx="32" cy="36" r="11" fill="#d94e43"/>
+                <circle cx="32" cy="36" r="4.5" fill="#ffffff"/>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <!-- CARD 2: Party Highlights -->
+        <section class="invite-card" aria-label="What's Waiting For You">
+          <p class="kicker-font">What's Waiting for You?</p>
+          <ul class="activity-desc" style="list-style: disc outside; padding-left: 17px; margin: 12px 0 0; text-align: left; line-height: 1.5; display: grid; gap: 10px;">
+            <li><strong>Elf-Approved Feast:</strong> Pizza, festive sweets, hot cocoa and birthday cake!</li>
+            <li><strong>Santa's Workshop:</strong> Decorate gingerbread houses and write letters to Santa.</li>
+            <li><strong>Jingle Jam:</strong> Christmas games, singing and dancing!</li>
+            <li><strong>Festive Surprises:</strong> A special Christmas goodie box for every little guest!</li>
+          </ul>
+        </section>
+
+        <!-- CARD 3: Festive Attire -->
+        <section class="invite-card" id="dressCodeSection" aria-label="Festive Attire">
+          <p class="kicker-font">FESTIVE ATTIRE</p>
+          <div class="activities-stack">
+            <div class="activity-box cake">
+              <h3 class="activity-title">Dress merry, bright &amp; ready for cookies!</h3>
+              <p class="activity-desc">Wear your favorite Christmas colors, Santa’s camera will be ready!</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- CARD 4: Live Holiday Countdown at the Very End -->
+        <section class="invite-card" id="countdownSection" aria-label="Holiday Countdown">
+          <p class="kicker-font">BEGIN THE COUNTDOWN AND FUN</p>
+          <h2 class="countdown-heading">Counting Down to the<br/>Magic</h2>
+
+          <div class="countdown-tray" aria-label="Countdown Timer">
+            <div class="time-tile">
+              <span class="time-num" id="cdDays">13</span>
+              <span class="time-unit">DAYS</span>
+            </div>
+            <div class="time-tile">
+              <span class="time-num" id="cdHours">18</span>
+              <span class="time-unit">HOURS</span>
+            </div>
+            <div class="time-tile">
+              <span class="time-num" id="cdMins">22</span>
+              <span class="time-unit">MINS</span>
+            </div>
+            <div class="time-tile">
+              <span class="time-num" id="cdSecs">00</span>
+              <span class="time-unit">SECS</span>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+      </div><!-- /#phone-shell -->
+    </div><!-- /#storybook-viewport -->
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // =========================================================================
+      // 1. DOM ELEMENT REFERENCES
+      // =========================================================================
+      const runway = document.getElementById('scroll-runway');
+      const cardFrame = document.getElementById('card-frame');
+      const planeSky = document.getElementById('plane-sky');
+      const planeHero = document.getElementById('plane-hero');
+      const planeVillage = document.getElementById('plane-village');
+      const villageLeft = document.getElementById('village-left');
+      const villageRight = document.getElementById('village-right');
+      const planeForeground = document.getElementById('plane-foreground');
+      const stage1Typography = document.getElementById('stage1-typography');
+
+      const santaNoticeBoard = document.getElementById('santa-notice-board');
+      const noticeShadow = document.getElementById('notice-shadow');
+      const noticeWoodFrame = document.getElementById('notice-wood-frame');
+      const noticeParchment = document.getElementById('notice-parchment');
+      const noticeGoldBorder = document.getElementById('notice-gold-border');
+      const noticeSvgText = document.getElementById('notice-svg-text');
+      const rivetBl = document.getElementById('rivet-bl');
+      const rivetBr = document.getElementById('rivet-br');
+      const santaMittens = document.getElementById('santa-mittens');
+
+      const creamHandoffVeil = document.getElementById('cream-handoff-veil');
+      const revealShell = document.getElementById('invitation-reveal-shell');
+      const backToVillageBtn = document.getElementById('backToVillageBtn');
+
+      // Part 2 elements
+      const pageContainer = document.getElementById('pageContainer');
+      const chimneyShaft = document.getElementById('chimneyShaft');
+      const fireplaceBase = document.getElementById('fireplaceBase');
+      const santaActor = document.getElementById('santaActor');
+      const santaSvgWrap = document.getElementById('santaSvgWrap');
+      const santaTumbleGroup = document.getElementById('santaTumbleGroup');
+      const tumbleLeftLeg = document.getElementById('tumbleLeftLeg');
+      const tumbleRightLeg = document.getElementById('tumbleRightLeg');
+      const santaButtUpGroup = document.getElementById('santaButtUpGroup');
+      const buttLegLeftGroup = document.getElementById('buttLegLeftGroup');
+      const buttLegRightGroup = document.getElementById('buttLegRightGroup');
+      const santaBubble = document.getElementById('santaBubble');
+
+      // =========================================================================
+      // 2. INTERPOLATION HELPERS
+      // =========================================================================
+      function clamp(val, min, max) {
+        return Math.max(min, Math.min(max, val));
+      }
+
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+
+      function smoothstep(edge0, edge1, x) {
+        const t = clamp((x - edge0) / (edge1 - edge0), 0, 1);
+        return t * t * (3 - 2 * t);
+      }
+
+      function smootherstep(edge0, edge1, x) {
+        const t = clamp((x - edge0) / (edge1 - edge0), 0, 1);
+        return t * t * t * (t * (t * 6 - 15) + 10);
+      }
+
+      // =========================================================================
+      // 3. PART 1: 2D CANVAS LAYERED SNOWFALL (#snow-canvas)
+      // =========================================================================
+      const snowCanvas = document.getElementById('snow-canvas');
+      const ctx = snowCanvas.getContext('2d');
+      let canvasW = 0;
+      let canvasH = 0;
+      let snowDensity = 0.24;
+      let scrollVelocity = 0;
+
+      const snowflakes = [];
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const coarsePointer = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+      let liteMotion = !!(reduceMotion || (navigator.deviceMemory && navigator.deviceMemory <= 4) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
+      const MAX_FLAKES = 86;
+      let snowFrameTime = 0;
+      let invitationSnowFrame = null;
+      let startInvitationSnow = function () {};
+      let stopInvitationSnow = function () {};
+      function enableLiteMotion() {
+        liteMotion = true;
+        document.body.classList.add('lite-motion');
+      }
+      if (liteMotion) enableLiteMotion();
+
+      function resizeSnowCanvas() {
+        try {
+          const rect = cardFrame.getBoundingClientRect();
+          const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
+          canvasW = rect.width;
+          canvasH = rect.height;
+          const pixelW = Math.round(canvasW * dpr), pixelH = Math.round(canvasH * dpr);
+          if (snowCanvas.width === pixelW && snowCanvas.height === pixelH) return;
+          snowCanvas.width = pixelW;
+          snowCanvas.height = pixelH;
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        } catch (e) {
+          // Ignore early layout edge cases
+        }
+      }
+
+      function createFlake(randomY) {
+        const depth = Math.random();
+        return {
+          x: Math.random() * (canvasW || 420),
+          y: randomY ? Math.random() * (canvasH || 800) : -12,
+          radius: lerp(1.1, 4.4, depth * depth),
+          speedY: lerp(0.55, 2.2, depth),
+          windX: lerp(0.15, 0.58, depth),
+          swayAmp: lerp(0.25, 1.05, depth),
+          swayFreq: lerp(0.008, 0.022, Math.random()),
+          phase: Math.random() * Math.PI * 2,
+          alpha: lerp(0.32, 0.9, depth),
+          depth: depth
+        };
+      }
+
+      function initFlakes() {
+        snowflakes.length = 0;
+        for (let i = 0; i < MAX_FLAKES; i++) {
+          snowflakes.push(createFlake(true));
+        }
+      }
+
+      function renderSnow(now) {
+        if (!ctx || canvasW === 0 || canvasH === 0 || reduceMotion) return;
+        const interval = liteMotion ? 50 : 32;
+        if (now - snowFrameTime < interval) return;
+        const step = Math.min(3, Math.max(1, (now - snowFrameTime) / 16.67));
+        snowFrameTime = now;
+        ctx.clearRect(0, 0, canvasW, canvasH);
+
+        if (snowDensity <= 0.01) return;
+
+        const activeCount = Math.floor(lerp(12, liteMotion ? 38 : MAX_FLAKES, snowDensity));
+        const globalAlpha = clamp(snowDensity * 1.15, 0, 1);
+
+        for (let i = 0; i < activeCount; i++) {
+          const f = snowflakes[i];
+          f.phase += f.swayFreq * step;
+          f.y += (f.speedY * lerp(0.8, 1.3, snowDensity) - scrollVelocity * (0.2 + f.depth * 0.6)) * step;
+          f.x += (f.windX + Math.sin(f.phase) * f.swayAmp) * step;
+
+          if (f.y > canvasH + 14) {
+            f.y = -12;
+            f.x = Math.random() * canvasW;
+          } else if (f.y < -16) {
+            f.y = canvasH + 12;
+            f.x = Math.random() * canvasW;
+          }
+
+          if (f.x > canvasW + 14) f.x = -12;
+          if (f.x < -14) f.x = canvasW + 12;
+
+          ctx.beginPath();
+          ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(250, 244, 232, ${(f.alpha * globalAlpha).toFixed(3)})`;
+          ctx.fill();
+        }
+      }
+
+      // =========================================================================
+      // 4. PART 1 -> PART 2 CONTINUOUS SCROLL & SMOOTH OPENING TRANSITION
+      // =========================================================================
+      let targetProgress = 0;
+      let currentProgress = 0;
+      let virtualScrollY = 0;
+      let cachedMaxScroll = 1;
+      let isInvitationRevealed = false;
+      let isSmoothTransitioning = false;
+      let transitionAnimId = null;
+
+      function maxScrollable() {
+        return cachedMaxScroll;
+      }
+
+      function updateScrollMetrics() {
+        cachedMaxScroll = Math.max(1, runway.offsetHeight - document.documentElement.clientHeight);
+      }
+
+      function cancelAutoGlide() {
+        if (transitionAnimId) {
+          cancelAnimationFrame(transitionAnimId);
+          transitionAnimId = null;
+        }
+        isSmoothTransitioning = false;
+      }
+
+      function syncVirtualScroll(nextY) {
+        const maxY = maxScrollable();
+        const clampedY = clamp(nextY, 0, maxY);
+        virtualScrollY = clampedY;
+        targetProgress = clampedY / maxY;
+        if (Math.abs(window.scrollY - clampedY) > 0.5) {
+          window.scrollTo(0, clampedY);
+        }
+      }
+
+      function readScrollProgress() {
+        const maxY = maxScrollable();
+        const nativeY = Math.max(
+          window.scrollY || 0,
+          window.pageYOffset || 0,
+          document.documentElement ? document.documentElement.scrollTop : 0,
+          document.body ? document.body.scrollTop : 0
+        );
+        virtualScrollY = clamp(nativeY, 0, maxY);
+        return clamp(virtualScrollY / maxY, 0, 1);
+      }
+
+      function setInvitationRevealedState(open) {
+        if (isInvitationRevealed === open) return;
+        isInvitationRevealed = open;
+        revealShell.classList.toggle('is-open', open);
+        revealShell.setAttribute('aria-hidden', open ? 'false' : 'true');
+        document.body.classList.toggle('invitation-active', open);
+
+        const cueText = document.getElementById('persistent-scroll-cue-text');
+        if (cueText) {
+          if (open) {
+            cueText.textContent = 'KEEP SCROLLING DOWN';
+            cueText.style.color = '#d94e43';
+            cueText.style.textShadow = '0 0 8px rgba(217, 78, 67, 0.45), 0 0 14px rgba(217, 78, 67, 0.28), 0 1px 2px rgba(252, 250, 247, 0.95)';
+          } else {
+            cueText.textContent = 'KEEP SCROLLING UP';
+            cueText.style.color = '#fdf6e2';
+            cueText.style.textShadow = '0 0 8px rgba(217, 78, 67, 0.95), 0 0 16px rgba(184, 29, 36, 0.85), 0 1px 3px rgba(115, 14, 10, 0.95)';
+            cueText.style.opacity = '1';
+          }
+        }
+        if (open) {
+          revealShell.scrollTop = 0;
+          chimneyTargetProgress = chimneyCurrentProgress = 0;
+          smoothRotation = 0;
+          hasTriggeredCrashConfetti = false;
+          recalcChimneyMetrics();
+          startInvitationSnow();
+        } else {
+          stopInvitationSnow();
+          clearConfetti();
+        }
+      }
+
+      function smoothGlideToProgress(destProgress, onComplete) {
+        cancelAutoGlide();
+        isSmoothTransitioning = true;
+        const startP = currentProgress;
+        const startTime = performance.now();
+        const duration = reduceMotion ? 1 : 320;
+
+        function step(now) {
+          const rawT = clamp((now - startTime) / duration, 0, 1);
+          const easedT = smootherstep(0, 1, rawT);
+          const nextP = lerp(startP, destProgress, easedT);
+          syncVirtualScroll(nextP * maxScrollable());
+
+          if (rawT < 1) {
+            transitionAnimId = requestAnimationFrame(step);
+          } else {
+            isSmoothTransitioning = false;
+            transitionAnimId = null;
+            if (typeof onComplete === 'function') onComplete();
+          }
+        }
+
+        transitionAnimId = requestAnimationFrame(step);
+      }
+
+      function openElaiaInvitationSmoothly() {
+        setInvitationRevealedState(true);
+        smoothGlideToProgress(1.0);
+      }
+
+      function returnToWinterVillageSmoothly() {
+        setInvitationRevealedState(false);
+        smoothGlideToProgress(0.56);
+      }
+
+      const attributeCache = new WeakMap();
+      function setAttr(el, key, value) {
+        let entries = attributeCache.get(el);
+        if (!entries) { entries = {}; attributeCache.set(el, entries); }
+        if (entries[key] !== value) { entries[key] = value; el.setAttribute(key, value); }
+      }
+      function applyCameraStage(p) {
+        // STAGE 1 (0% - 22%): Arched Topic Heading scales & fades out smoothly
+        const titleAlpha = 1 - smoothstep(0.03, 0.20, p);
+        const titleScale = lerp(1.0, 1.15, smoothstep(0.0, 0.22, p));
+        setAttr(stage1Typography, 'opacity', titleAlpha.toFixed(4));
+        setAttr(stage1Typography, 
+          'transform',
+          `translate(225, 220) scale(${titleScale.toFixed(4)}) translate(-225, -220)`
+        );
+
+        // FOREGROUND LAYER (#plane-foreground)
+        const fgScale = lerp(1.0, 3.15, smoothstep(0.0, 0.52, p));
+        planeForeground.style.transform = `scale(${fgScale.toFixed(4)})`;
+        setAttr(planeForeground, 'opacity', '1');
+
+        // VILLAGE LAYER (#plane-village)
+        const outEase = smoothstep(0.08, 0.78, p);
+        const villageScale = lerp(1.0, 5.4, outEase);
+        const villageY = lerp(0, 145, outEase);
+        planeVillage.style.transform = `translate(0px, ${villageY.toFixed(2)}px) scale(${villageScale.toFixed(4)})`;
+        setAttr(planeVillage, 'opacity', '1');
+
+        const sideShiftX = lerp(0, 195, smoothstep(0.12, 0.78, p));
+        const sideScale = lerp(1.0, 1.38, smoothstep(0.12, 0.78, p));
+        setAttr(villageLeft, 
+          'transform',
+          `translate(${(-sideShiftX).toFixed(2)}, 0) scale(${sideScale.toFixed(4)})`
+        );
+        setAttr(villageRight, 
+          'transform',
+          `translate(${sideShiftX.toFixed(2)}, 0) scale(${sideScale.toFixed(4)})`
+        );
+
+        // Sky subtle depth zoom
+        const skyScale = lerp(1.0, 1.32, p);
+        planeSky.style.transform = `scale(${skyScale.toFixed(4)})`;
+
+        // HERO LAYER (#plane-hero)
+        let heroScale;
+        const heroX = 225;
+        let heroY;
+
+        if (p <= 0.40) {
+          const t = smoothstep(0.0, 0.40, p);
+          heroScale = lerp(0.22, 0.56, t);
+          heroY = lerp(422, 438, t);
+        } else if (p <= 0.72) {
+          const t = smoothstep(0.40, 0.72, p);
+          heroScale = lerp(0.56, 1.00, t);
+          heroY = lerp(438, 448, t);
+        } else {
+          const t = smoothstep(0.72, 1.00, p);
+          heroScale = lerp(1.00, 3.05, t);
+          heroY = lerp(448, 400 - 111 * 3.05, t);
+        }
+
+        setAttr(planeHero, 
+          'transform',
+          `translate(${heroX.toFixed(2)}, ${heroY.toFixed(2)}) scale(${heroScale.toFixed(4)})`
+        );
+
+        // BOARD EXPANSION (p = 0.72 to 0.98)
+        const boardExpand = smoothstep(0.72, 0.98, p);
+        const boardW = lerp(158, 412, boardExpand);
+        const boardH = lerp(104, 670, boardExpand);
+        const boardX = -boardW / 2;
+        const boardY = 111 - boardH / 2;
+
+        setAttr(noticeShadow, 'x', (boardX - 1).toFixed(2));
+        setAttr(noticeShadow, 'y', (boardY + 2).toFixed(2));
+        setAttr(noticeShadow, 'width', (boardW + 2).toFixed(2));
+        setAttr(noticeShadow, 'height', (boardH + 2).toFixed(2));
+
+        setAttr(noticeWoodFrame, 'x', boardX.toFixed(2));
+        setAttr(noticeWoodFrame, 'y', boardY.toFixed(2));
+        setAttr(noticeWoodFrame, 'width', boardW.toFixed(2));
+        setAttr(noticeWoodFrame, 'height', boardH.toFixed(2));
+
+        setAttr(noticeParchment, 'x', (boardX + 7).toFixed(2));
+        setAttr(noticeParchment, 'y', (boardY + 7).toFixed(2));
+        setAttr(noticeParchment, 'width', Math.max(20, boardW - 14).toFixed(2));
+        setAttr(noticeParchment, 'height', Math.max(20, boardH - 14).toFixed(2));
+
+        setAttr(noticeGoldBorder, 'x', (boardX + 12).toFixed(2));
+        setAttr(noticeGoldBorder, 'y', (boardY + 12).toFixed(2));
+        setAttr(noticeGoldBorder, 'width', Math.max(16, boardW - 24).toFixed(2));
+        setAttr(noticeGoldBorder, 'height', Math.max(16, boardH - 24).toFixed(2));
+
+        const bottomRivetY = boardY + boardH - 5;
+        setAttr(rivetBl, 'cy', bottomRivetY.toFixed(2));
+        setAttr(rivetBr, 'cy', bottomRivetY.toFixed(2));
+
+        const synchronizedHandoffFade = 1 - smoothstep(0.80, 0.90, p);
+        setAttr(noticeSvgText, 'opacity', synchronizedHandoffFade.toFixed(4));
+        setAttr(santaMittens, 'opacity', synchronizedHandoffFade.toFixed(4));
+
+        // Warm cream veil eases in ahead of the reveal so no green background ever shows through
+        const veilAlpha = smoothstep(0.76, 0.90, p);
+        if (creamHandoffVeil) {
+          creamHandoffVeil.style.opacity = veilAlpha.toFixed(4);
+        }
+
+        // Seamless cross-dissolve & glide into Part 2 as p reaches 0.80..0.90
+        if (p >= 0.80 && !isInvitationRevealed && !isSmoothTransitioning) {
+          setInvitationRevealedState(true);
+        } else if (p < 0.74 && isInvitationRevealed && !isSmoothTransitioning) {
+          setInvitationRevealedState(false);
+        }
+
+        // 2D SNOWFALL INTENSITY
+        if (p < 0.25) {
+          snowDensity = lerp(0.24, 0.85, smoothstep(0.0, 0.25, p));
+        } else if (p < 0.76) {
+          snowDensity = lerp(0.85, 1.0, smoothstep(0.25, 0.55, p));
+        } else {
+          snowDensity = lerp(1.0, 0.15, smoothstep(0.76, 0.95, p));
+        }
+      }
+
+      // Click / keyboard triggers on Santa's notice board & prompt
+      santaNoticeBoard.addEventListener('click', openElaiaInvitationSmoothly);
+      santaNoticeBoard.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openElaiaInvitationSmoothly();
+        }
+      });
+      backToVillageBtn.addEventListener('click', returnToWinterVillageSmoothly);
+
+      // =========================================================================
+      // 5. PART 2: PENNANT BUNTING, SNOW CANVAS, AUDIO CHIME & COUNTDOWN
+      // =========================================================================
+      (function renderBunting() {
+        const group = document.getElementById('buntingFlags');
+        if (!group) return;
+        const colors = ['#d94e43', '#63a496', '#f3c64f', '#d94e43', '#89bdb2'];
+        const count = 18;
+        const step = 600 / count;
+        let html = '';
+        for (let i = 0; i < count; i++) {
+          const x1 = i * step + 3;
+          const x2 = (i + 1) * step - 3;
+          const xm = (x1 + x2) / 2;
+          const yTop = 4 + Math.sin((i / count) * Math.PI) * 5;
+          const color = colors[i % colors.length];
+          html += `<polygon points="${x1},${yTop} ${x2},${yTop} ${xm},${yTop + 22}" fill="${color}" />`;
+        }
+        group.innerHTML = html;
+      })();
+
+      (function initInvitationSnowCanvas() {
+        const canvas = document.getElementById('snowCanvas');
+        if (!canvas) return;
+        const sCtx = canvas.getContext('2d');
+        if (!sCtx) return;
+        let width = 0;
+        let height = 0;
+        const flakes = [];
+
+        function resize() {
+          const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
+          const shell = document.getElementById('phone-shell');
+          const rect = shell ? shell.getBoundingClientRect() : null;
+          width = (rect && rect.width) || window.innerWidth || 375;
+          height = (rect && rect.height) || window.innerHeight || 667;
+          const pixelW = Math.round(width * dpr), pixelH = Math.round(height * dpr);
+          if (canvas.width === pixelW && canvas.height === pixelH) return;
+          canvas.width = pixelW;
+          canvas.height = pixelH;
+          sCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        resize();
+        window.addEventListener('resize', resize, { passive: true });
+
+        for (let i = 0; i < 24; i++) {
+          flakes.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            r: 1.8 + Math.random() * 2.8,
+            vy: 18 + Math.random() * 26,
+            vx: (Math.random() - 0.5) * 14,
+            phase: Math.random() * Math.PI * 2,
+            alpha: 0.35 + Math.random() * 0.4
+          });
+        }
+
+        let lastTs = performance.now();
+        function renderInvSnow(now) {
+          invitationSnowFrame = null;
+          if (!isInvitationRevealed || document.hidden || reduceMotion) return;
+          if (now - lastTs < (liteMotion ? 50 : 32)) {
+            invitationSnowFrame = requestAnimationFrame(renderInvSnow);
+            return;
+          }
+          const dt = Math.min(0.1, (now - lastTs) / 1000);
+          lastTs = now;
+          sCtx.clearRect(0, 0, width, height);
+
+          if (isInvitationRevealed) {
+            for (let i = 0; i < (liteMotion ? 12 : flakes.length); i++) {
+              const f = flakes[i];
+              f.y += f.vy * dt;
+              f.x += (f.vx + Math.sin(now * 0.0012 + f.phase) * 9) * dt;
+              if (f.y > height + 10) {
+                f.y = -10;
+                f.x = Math.random() * width;
+              }
+              if (f.x < -10) f.x = width + 10;
+              if (f.x > width + 10) f.x = -10;
+
+              sCtx.beginPath();
+              sCtx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+              sCtx.fillStyle = `rgba(235, 224, 214, ${f.alpha})`;
+              sCtx.fill();
+            }
+          }
+          invitationSnowFrame = requestAnimationFrame(renderInvSnow);
+        }
+        startInvitationSnow = function () {
+          if (invitationSnowFrame !== null || reduceMotion || document.hidden) return;
+          lastTs = performance.now();
+          invitationSnowFrame = requestAnimationFrame(renderInvSnow);
+        };
+        stopInvitationSnow = function () {
+          if (invitationSnowFrame !== null) cancelAnimationFrame(invitationSnowFrame);
+          invitationSnowFrame = null;
+          sCtx.clearRect(0, 0, width, height);
+        };
+      })();
+
+      const jumpBtn = document.getElementById('jumpCountdownBtn');
+      if (jumpBtn) jumpBtn.addEventListener('click', () => {
+        const target = document.getElementById('countdownSection');
+        if (target) {
+          setManualScrubProgress(1);
+        }
+      });
+
+      (function initAudioChime() {
+        const btn = document.getElementById('audioToggleBtn');
+        const iconOn = document.getElementById('audioIconOn');
+        const iconOff = document.getElementById('audioIconOff');
+        if (!btn) return;
+        let audioCtx = null;
+        let isPlaying = false;
+        let loopTimer = null;
+
+        const melody = [
+          [659.25, 0.22], [659.25, 0.22], [659.25, 0.44],
+          [659.25, 0.22], [659.25, 0.22], [659.25, 0.44],
+          [659.25, 0.22], [783.99, 0.22], [523.25, 0.32], [587.33, 0.14], [659.25, 0.65]
+        ];
+
+        function playSequence() {
+          if (!isPlaying) return;
+          try {
+            if (!audioCtx) {
+              const Ctx = window.AudioContext || window.webkitAudioContext;
+              audioCtx = new Ctx();
+            }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            let t = audioCtx.currentTime + 0.04;
+            melody.forEach(([freq, dur]) => {
+              const osc = audioCtx.createOscillator();
+              const gain = audioCtx.createGain();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(freq, t);
+              gain.gain.setValueAtTime(0.001, t);
+              gain.gain.exponentialRampToValueAtTime(0.08, t + 0.03);
+              gain.gain.exponentialRampToValueAtTime(0.0008, t + dur);
+              osc.connect(gain);
+              gain.connect(audioCtx.destination);
+              osc.start(t);
+              osc.stop(t + dur + 0.02);
+              t += dur + 0.04;
+            });
+            loopTimer = setTimeout(playSequence, 3800);
+          } catch (e) {
+            isPlaying = false;
+          }
+        }
+
+        btn.addEventListener('click', () => {
+          isPlaying = !isPlaying;
+          btn.classList.toggle('active-audio', isPlaying);
+          if (iconOn) iconOn.style.display = isPlaying ? 'block' : 'none';
+          if (iconOff) iconOff.style.display = isPlaying ? 'none' : 'block';
+          clearTimeout(loopTimer);
+          if (isPlaying) {
+            playSequence();
+          }
+        });
+      })();
+
+      (function initCountdown() {
+        const targetTs = new Date('2026-12-07T14:30:00+01:00').getTime();
+        const dEl = document.getElementById('cdDays');
+        const hEl = document.getElementById('cdHours');
+        const mEl = document.getElementById('cdMins');
+        const sEl = document.getElementById('cdSecs');
+        if (!dEl || !hEl || !mEl || !sEl) return;
+
+        function update() {
+          const diff = Math.max(0, targetTs - Date.now());
+          const days = Math.floor(diff / 86400000);
+          const hours = Math.floor((diff % 86400000) / 3600000);
+          const mins = Math.floor((diff % 3600000) / 60000);
+          const secs = Math.floor((diff % 60000) / 1000);
+          dEl.textContent = String(days).padStart(2, '0');
+          hEl.textContent = String(hours).padStart(2, '0');
+          mEl.textContent = String(mins).padStart(2, '0');
+          sEl.textContent = String(secs).padStart(2, '0');
+        }
+        update();
+        setInterval(update, 1000);
+      })();
+
+      // =========================================================================
+      // 6. PART 2: CONFETTI BURST, CHIMNEY PHYSICS & CALENDAR INTEGRATION
+      // =========================================================================
+      const confettiLayer = document.getElementById('confettiBurstLayer');
+      const confettiParticles = [];
+      let confettiAnimId = null;
+
+      function clearConfetti() {
+        if (confettiAnimId !== null) cancelAnimationFrame(confettiAnimId);
+        confettiAnimId = null;
+        confettiParticles.forEach(function (p) { p.el.remove(); });
+        confettiParticles.length = 0;
+      }
+      function triggerImpactConfettiBurst() {
+        if (!confettiLayer || !isInvitationRevealed || reduceMotion) return;
+        const shell = document.getElementById('phone-shell');
+        const shellRect = shell ? shell.getBoundingClientRect() : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
+        const fireplace = document.getElementById('fireplaceBase');
+        const rect = fireplace
+          ? fireplace.getBoundingClientRect()
+          : { left: shellRect.left + shellRect.width * 0.15, top: shellRect.top + shellRect.height * 0.72, width: 84, height: 86 };
+
+        const originX = (rect.left - shellRect.left) + rect.width * 0.52;
+        const originY = (rect.top - shellRect.top) + 6;
+        const palette = ['#d94e43', '#5ea192', '#d9a43b', '#b57b5c', '#e8ddd5'];
+
+        for (let i = 0; i < (liteMotion ? 18 : 32); i++) {
+          const el = document.createElement('span');
+          el.className = 'ballistic-dot';
+          const size = 6 + Math.random() * 8;
+          const color = palette[i % palette.length];
+          el.style.width = `${size}px`;
+          el.style.height = `${size}px`;
+          el.style.backgroundColor = color;
+          confettiLayer.appendChild(el);
+
+          const angle = -Math.PI * (0.06 + Math.random() * 0.78);
+          const speed = 160 + Math.random() * 420;
+          confettiParticles.push({
+            el,
+            x: originX + (Math.random() - 0.5) * 40,
+            y: originY + (Math.random() - 0.5) * 16,
+            vx: Math.cos(angle) * speed * (0.85 + Math.random() * 0.55) + Math.random() * 140,
+            vy: Math.sin(angle) * speed - 65,
+            gravity: 420 + Math.random() * 210,
+            drag: 0.965,
+            flutterFreq: 4 + Math.random() * 5,
+            flutterAmp: 16 + Math.random() * 24,
+            age: 0,
+            life: 1.95 + Math.random() * 1.35
+          });
+        }
+
+        if (!confettiAnimId) {
+          let lastTime = performance.now();
+          function stepConfetti(now) {
+            const dt = Math.min(0.05, (now - lastTime) / 1000);
+            lastTime = now;
+
+            for (let i = confettiParticles.length - 1; i >= 0; i--) {
+              const p = confettiParticles[i];
+              p.age += dt;
+              if (p.age >= p.life) {
+                p.el.remove();
+                confettiParticles.splice(i, 1);
+                continue;
+              }
+              p.vx *= Math.pow(p.drag, dt * 60);
+              p.vy = p.vy * Math.pow(p.drag, dt * 60) + p.gravity * dt;
+              p.x += (p.vx + Math.sin(p.age * p.flutterFreq) * p.flutterAmp) * dt;
+              p.y += p.vy * dt;
+
+              const t = p.age / p.life;
+              const alpha = Math.max(0, 1 - Math.pow(t, 2.2));
+              const scale = 1 - t * 0.25;
+              p.el.style.transform = `translate3d(${p.x.toFixed(1)}px, ${p.y.toFixed(1)}px, 0) scale(${scale.toFixed(2)})`;
+              p.el.style.opacity = alpha.toFixed(3);
+            }
+
+            if (confettiParticles.length > 0) {
+              confettiAnimId = requestAnimationFrame(stepConfetti);
+            } else {
+              confettiAnimId = null;
+            }
+          }
+          confettiAnimId = requestAnimationFrame(stepConfetti);
+        }
+      }
+
+      let chimneyTargetProgress = 0;
+      let chimneyCurrentProgress = 0;
+      let smoothRotation = 0;
+      let isDraggingChimney = false;
+      let hasTriggeredCrashConfetti = false;
+      let lastBubbleText = '';
+      let cachedTopStart = -54;
+      let cachedBottomCrash = 756;
+      let cachedChimneyScroll = 1;
+      let cachedShellWidth = 375;
+      let cachedBubbleWidth = 126;
+      let cachedActorCenter = 51;
+
+      function recalcChimneyMetrics() {
+        if (!chimneyShaft) return;
+        const shaftHeight = chimneyShaft.offsetHeight || 920;
+        cachedChimneyScroll = Math.max(1, revealShell.scrollHeight - revealShell.clientHeight);
+        cachedShellWidth = revealShell.clientWidth || 375;
+        chimneyTargetProgress = computeChimneyScrollProgress();
+        cachedTopStart = -54;
+        cachedBottomCrash = shaftHeight - 156;
+
+        if (fireplaceBase) {
+          const shaftRect = chimneyShaft.getBoundingClientRect();
+          const fpRect = fireplaceBase.getBoundingClientRect();
+          cachedActorCenter = shaftRect.left + shaftRect.width / 2 - revealShell.getBoundingClientRect().left;
+          if (shaftRect.height > 0 && fpRect.height > 0) {
+            const mantelTopInShaft = (fpRect.top - shaftRect.top) - 5;
+            const beltOffsetInActor = 148;
+            cachedBottomCrash = mantelTopInShaft - beltOffsetInActor;
+          }
+        }
+      }
+
+      recalcChimneyMetrics();
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(recalcChimneyMetrics);
+      }
+
+      function computeChimneyScrollProgress() {
+        return clamp(revealShell.scrollTop / cachedChimneyScroll, 0, 1);
+      }
+
+      function setManualScrubProgress(p) {
+        const clamped = clamp(p, 0, 1);
+        chimneyTargetProgress = clamped;
+        if (revealShell) {
+          const vh = revealShell.clientHeight || window.innerHeight || 640;
+          const maxScroll = Math.max(0, revealShell.scrollHeight - vh);
+          revealShell.scrollTop = clamped * maxScroll;
+        }
+      }
+
+      revealShell.addEventListener('scroll', () => {
+        if (!isDraggingChimney) {
+          chimneyTargetProgress = computeChimneyScrollProgress();
+        }
+        const cueText = document.getElementById('persistent-scroll-cue-text');
+        if (cueText && isInvitationRevealed) {
+          const atBottom = revealShell.scrollTop >= cachedChimneyScroll - 24;
+          cueText.style.opacity = atBottom ? '0' : '1';
+        }
+      }, { passive: true });
+
+      function updateScrubFromClientY(clientY) {
+        if (!chimneyShaft) return;
+        const rect = chimneyShaft.getBoundingClientRect();
+        const ratio = clamp((clientY - rect.top) / Math.max(1, rect.height), 0, 1);
+        setManualScrubProgress(ratio);
+      }
+
+      if (chimneyShaft) {
+        chimneyShaft.addEventListener('pointerdown', (e) => {
+          if (e.pointerType !== 'mouse') return;
+          isDraggingChimney = true;
+          if (chimneyShaft.setPointerCapture) chimneyShaft.setPointerCapture(e.pointerId);
+          updateScrubFromClientY(e.clientY);
+        });
+        chimneyShaft.addEventListener('pointermove', (e) => {
+          if (isDraggingChimney) {
+            updateScrubFromClientY(e.clientY);
+          }
+        });
+        chimneyShaft.addEventListener('pointerup', () => {
+          isDraggingChimney = false;
+        });
+        chimneyShaft.addEventListener('pointercancel', () => {
+          isDraggingChimney = false;
+        });
+      }
+
+      function applyChimneySantaFrame(now, dt) {
+        const alpha = 1 - Math.exp(-dt * 30);
+        chimneyCurrentProgress += (chimneyTargetProgress - chimneyCurrentProgress) * alpha;
+        if (Math.abs(chimneyTargetProgress - chimneyCurrentProgress) < 0.0002) {
+          chimneyCurrentProgress = chimneyTargetProgress;
+        }
+
+        const p = chimneyCurrentProgress;
+        const easedDescent = smootherstep(0.0, 0.96, p);
+        const yPos = cachedTopStart + easedDescent * (cachedBottomCrash - cachedTopStart);
+        const xWobble = (1 - smoothstep(0.88, 0.96, p)) * Math.sin(p * Math.PI * 6) * 3.5;
+
+        if (santaActor) {
+          santaActor.style.transform = `translate3d(${xWobble.toFixed(2)}px, ${yPos.toFixed(2)}px, 0)`;
+        }
+
+        if (p < 0.96) {
+          const fallKickDeg = Math.sin(now * 0.015) * 14;
+          if (tumbleLeftLeg) {
+            tumbleLeftLeg.setAttribute('transform', `rotate(${fallKickDeg.toFixed(2)} 53 112)`);
+          }
+          if (tumbleRightLeg) {
+            tumbleRightLeg.setAttribute('transform', `rotate(${(-fallKickDeg).toFixed(2)} 87 112)`);
+          }
+        }
+
+        const flipProgress = smootherstep(0.04, 0.28, p);
+        const unflipForCrash = smootherstep(0.90, 0.96, p);
+        const activeTumble = flipProgress * (1 - unflipForCrash);
+        const swayAmp = smoothstep(0.06, 0.25, p) * (1 - smoothstep(0.88, 0.95, p));
+        const desiredRotation = activeTumble * 180 + swayAmp * Math.sin(now / 150) * 9 + (1 - flipProgress) * Math.sin(now / 260) * 3.5;
+
+        smoothRotation += (desiredRotation - smoothRotation) * (1 - Math.exp(-dt * 14));
+
+        const flueScale = 1 - 0.07 * smoothstep(0.08, 0.26, p) * (1 - smoothstep(0.88, 0.96, p));
+        if (santaSvgWrap) {
+          santaSvgWrap.style.transform = `rotate(${smoothRotation.toFixed(2)}deg) scale(${flueScale.toFixed(4)})`;
+        }
+
+        const crashBlend = smoothstep(0.92, 0.955, p);
+
+        if (santaTumbleGroup) {
+          if (crashBlend >= 0.995) {
+            santaTumbleGroup.style.display = 'none';
+          } else {
+            santaTumbleGroup.style.display = 'block';
+            santaTumbleGroup.style.opacity = (1 - crashBlend).toFixed(3);
+          }
+        }
+
+        if (santaButtUpGroup) {
+          if (crashBlend <= 0.005) {
+            santaButtUpGroup.style.display = 'none';
+          } else {
+            santaButtUpGroup.style.display = 'block';
+            santaButtUpGroup.style.opacity = crashBlend.toFixed(3);
+          }
+        }
+
+        if (crashBlend > 0.01) {
+          const halfCycleMs = 180;
+          const phase = (now % (halfCycleMs * 2)) / halfCycleMs;
+          const rawT = phase <= 1 ? phase : 2 - phase;
+          const easedT = rawT < 0.5 ? 2 * rawT * rawT : 1 - Math.pow(-2 * rawT + 2, 2) / 2;
+          const legSwingDeg = 11 - easedT * 22;
+
+          if (buttLegLeftGroup) {
+            buttLegLeftGroup.setAttribute('transform', `rotate(${legSwingDeg.toFixed(2)} 48 98)`);
+          }
+          if (buttLegRightGroup) {
+            buttLegRightGroup.setAttribute('transform', `rotate(${(-legSwingDeg).toFixed(2)} 92 98)`);
+          }
+        }
+
+        if (p >= 0.94 && !hasTriggeredCrashConfetti) {
+          hasTriggeredCrashConfetti = true;
+          triggerImpactConfettiBurst();
+        } else if (p < 0.85) {
+          hasTriggeredCrashConfetti = false;
+        }
+
+        if (santaBubble && santaActor) {
+          let bubbleText = '';
+          let bubbleAlpha = 0;
+          let bubbleTop = -26;
+
+          if (p < 0.10) {
+            bubbleText = 'KEEP SCROLLING';
+            bubbleAlpha = 1 - smoothstep(0.005, 0.065, p);
+            bubbleTop = 165;
+          } else if (p >= 0.10 && p < 0.37) {
+            bubbleText = 'ON MY WAY TO ELAIA’S!';
+            bubbleAlpha = smoothstep(0.10, 0.14, p) * (1 - smoothstep(0.33, 0.37, p));
+            bubbleTop = -24;
+          } else if (p >= 0.37 && p < 0.65) {
+            bubbleText = 'TOO MANY COOKIES! 🍪';
+            bubbleAlpha = smoothstep(0.37, 0.41, p) * (1 - smoothstep(0.61, 0.65, p));
+            bubbleTop = -26;
+          } else if (p >= 0.65 && p < 0.91) {
+            bubbleText = 'MAKE WAY FOR SIX!';
+            bubbleAlpha = smoothstep(0.65, 0.69, p) * (1 - smoothstep(0.87, 0.91, p));
+            bubbleTop = -26;
+          } else if (p >= 0.92) {
+            bubbleText = 'HO-HO-OOPS';
+            bubbleAlpha = smoothstep(0.92, 0.95, p);
+            bubbleTop = -32;
+          }
+
+          if (bubbleAlpha > 0.01 && bubbleText) {
+            if (lastBubbleText !== bubbleText) {
+              santaBubble.textContent = bubbleText;
+              santaBubble.classList.toggle('scroll-hint', bubbleText === 'KEEP SCROLLING');
+              lastBubbleText = bubbleText;
+              cachedBubbleWidth = santaBubble.offsetWidth || 126;
+            }
+            santaBubble.style.top = `${bubbleTop}px`;
+            santaBubble.style.opacity = bubbleAlpha.toFixed(3);
+
+            const bubbleWidth = cachedBubbleWidth;
+            const actorCenterX = cachedActorCenter + xWobble;
+            const margin = 10;
+            const vw = cachedShellWidth;
+
+            let shiftX = 0;
+            const projectedLeft = actorCenterX - bubbleWidth / 2;
+            const projectedRight = actorCenterX + bubbleWidth / 2;
+            if (projectedLeft < margin) {
+              shiftX = margin - projectedLeft;
+            } else if (projectedRight > vw - margin) {
+              shiftX = (vw - margin) - projectedRight;
+            }
+
+            const popScale = 0.92 + 0.08 * bubbleAlpha;
+            santaBubble.style.transform = `translate3d(calc(-50% + ${shiftX.toFixed(1)}px), 0, 0) scale(${popScale.toFixed(3)}) rotate(0deg)`;
+          } else {
+            santaBubble.style.opacity = '0';
+          }
+        }
+      }
+
+      (function initDirectCalendarLink() {
+        const saveBtn = document.getElementById('saveDateHeroBtn');
+        if (!saveBtn) return;
+
+        const icsLines = [
+          'BEGIN:VCALENDAR',
+          'VERSION:2.0',
+          'PRODID:-//Elaia Birthday Invitation//Salzburg//EN',
+          'CALSCALE:GREGORIAN',
+          'METHOD:PUBLISH',
+          'BEGIN:VEVENT',
+          'UID:elaias-6th-birthday-20261207@salzburg.invite',
+          'DTSTAMP:20261123T220000Z',
+          'DTSTART:20261207T133000Z',
+          'DTEND:20261207T163000Z',
+          'SUMMARY:Elaia’s 6th birthday',
+          'LOCATION:Santa’s Mini Workshop - Gärtnerstraße 59\\, Top 1\\, 5020 Salzburg\\, Austria',
+          'DESCRIPTION:Join us to celebrate Elaia’s 6th birthday! Festive Attire. Bring your smiles\\, parents are invited to stay and join the adventure!',
+          'STATUS:CONFIRMED',
+          'END:VEVENT',
+          'END:VCALENDAR'
+        ].join('\r\n');
+
+        const isApple = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) ||
+          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+        if (isApple && typeof Blob !== 'undefined' && typeof URL !== 'undefined' && URL.createObjectURL) {
+          try {
+            const icsBlob = new Blob([icsLines], { type: 'text/calendar;charset=utf-8' });
+            const blobUrl = URL.createObjectURL(icsBlob);
+            saveBtn.setAttribute('href', blobUrl);
+            saveBtn.setAttribute('target', '_blank');
+            saveBtn.setAttribute('rel', 'noopener noreferrer');
+            if (!(/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1))) {
+              saveBtn.setAttribute('download', 'Elaias-6th-birthday.ics');
+            }
+          } catch (e) {
+            // Falls back cleanly to Google Calendar HTTPS link
+          }
+        }
+      })();
+
+      // =========================================================================
+      // 7. Native scroll events and one animation loop for the visible scene.
+      // =========================================================================
+      window.addEventListener('scroll', function () {
+        if (!isInvitationRevealed && !isSmoothTransitioning) targetProgress = readScrollProgress();
+      }, { passive: true });
+      // User input may interrupt a programmatic return, but is never replayed.
+      function interruptGlide() {
+        if (isSmoothTransitioning && !isInvitationRevealed) cancelAutoGlide();
+      }
+      window.addEventListener('wheel', interruptGlide, { passive: true });
+      window.addEventListener('touchstart', interruptGlide, { passive: true });
+
+      let masterFrame = null;
+      let lastMasterTime = performance.now();
+      let lastCameraProgress = -1;
+      let lastChimneyFrame = 0;
+      let slowFrames = 0;
+      let sampleFrames = 0;
+      function animate(now) {
+        masterFrame = null;
+        if (document.hidden) return;
+        const elapsed = now - lastMasterTime;
+        lastMasterTime = now;
+        const dt = Math.min(0.1, Math.max(0.001, elapsed / 1000));
+        if (!liteMotion && coarsePointer && elapsed < 250) {
+          sampleFrames++;
+          if (elapsed > 30) slowFrames++;
+          if (sampleFrames >= 75) {
+            if (slowFrames > 24) enableLiteMotion();
+            sampleFrames = slowFrames = 0;
+          }
+        }
+        if (!isInvitationRevealed || isSmoothTransitioning) {
+          const delta = targetProgress - currentProgress;
+          // Very short time-based smoothing, no long trailing animation.
+          currentProgress = Math.abs(delta) < 0.0003 || reduceMotion ? targetProgress : currentProgress + delta * (1 - Math.exp(-dt * 38));
+          scrollVelocity = delta * 90;
+          if (Math.abs(currentProgress - lastCameraProgress) > 0.0001 || (currentProgress === targetProgress && lastCameraProgress !== currentProgress)) {
+            lastCameraProgress = currentProgress;
+            applyCameraStage(currentProgress);
+          }
+          if (!isInvitationRevealed) renderSnow(now);
+        }
+        if (isInvitationRevealed && now - lastChimneyFrame >= (liteMotion ? 32 : 15)) {
+          const chimneyDt = Math.min(0.1, Math.max(0.016, (now - lastChimneyFrame) / 1000));
+          lastChimneyFrame = now;
+          applyChimneySantaFrame(now, chimneyDt);
+        }
+        masterFrame = requestAnimationFrame(animate);
+      }
+      function startMaster() {
+        if (masterFrame !== null || document.hidden) return;
+        lastMasterTime = performance.now();
+        masterFrame = requestAnimationFrame(animate);
+      }
+      let resizeTimer;
+      function onResize() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          updateScrollMetrics();
+          resizeSnowCanvas();
+          recalcChimneyMetrics();
+          if (!isInvitationRevealed && !isSmoothTransitioning) targetProgress = readScrollProgress();
+        }, 100);
+      }
+      window.addEventListener('resize', onResize, { passive: true });
+      window.addEventListener('orientationchange', onResize, { passive: true });
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) {
+          if (masterFrame !== null) cancelAnimationFrame(masterFrame);
+          masterFrame = null;
+          stopInvitationSnow();
+          clearConfetti();
+        } else {
+          startMaster();
+          if (isInvitationRevealed) startInvitationSnow();
+        }
+      });
+      // Start immediately; do not wait for external fonts to finish loading.
+      updateScrollMetrics();
+      resizeSnowCanvas();
+      initFlakes();
+      currentProgress = targetProgress = readScrollProgress();
+      applyCameraStage(currentProgress);
+      lastCameraProgress = currentProgress;
+      startMaster();
+    })();
+  </script>
+</body>
+</html>
